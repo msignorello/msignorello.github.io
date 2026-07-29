@@ -1,0 +1,266 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const education = [
+  {
+    dates: "MBA",
+    place: "Villanova University",
+    title: "Master's Degree, Business Administration",
+    detail: "Concentration in Strategy and Marketing."
+  },
+  {
+    dates: "BS",
+    place: "New Jersey Institute of Technology",
+    title: "Bachelor's Degree, Information Systems & Management",
+    detail: "Technical and business systems foundation."
+  }
+];
+
+const experience = [
+  {
+    id: "justin-alexander",
+    dates: "2025 - Present",
+    place: "Justin Alexander Group, Inc",
+    logo: "https://prod.justinalexandermedia.com/media/gallery/general_media/brand_logos/justin-alexander.svg",
+    title: "Director, Digital Products & Engineering",
+    detail:
+      "Leading product owners, UX designers, and engineers developing web platforms for B2B and B2C customers while overseeing digital marketing and customer journey execution.",
+    highlights: [
+      "Implemented agile, sprint-driven development and planning processes from the ground up.",
+      "Manage KPI delivery across more than $3M in digital advertising budget.",
+      "Delivered B2B web portal features using Salesforce API sourced data for dashboards, messaging, and product performance insights.",
+      "Implemented HubSpot Marketing and Data Hub to replace Salesforce Marketing Cloud."
+    ]
+  },
+  {
+    id: "volvo-senior-manager",
+    dates: "2022 - 2024",
+    place: "Volvo Cars USA",
+    logo: "https://mattsignorello.com/wp-content/uploads/2020/04/Volvo-Icon.png",
+    title: "Senior Manager in Connected Car Product & Engineering",
+    detail:
+      "Led multiple teams across technical support and operations, mobile-app product management, quality assurance, and software engineering.",
+    highlights: [
+      "Launched EV Charging & Payments for 200K+ mobile app users and grew 10,000+ active users in the first 60 days.",
+      "Scaled team to over 10 members and managed more than $3M budget for app features, enhancements, and backend systems.",
+      "Reduced operational costs by over 50% and led migration of 400,000+ vehicles from legacy to new mobile network operators.",
+      "Built AI workflows to collect social-media and mobile app review data for feature, release, and quality monitoring."
+    ]
+  },
+  {
+    id: "volvo-connected-car",
+    dates: "2016 - 2022",
+    place: "Volvo Cars USA",
+    logo: "https://mattsignorello.com/wp-content/uploads/2020/04/Volvo-Icon.png",
+    title: "Manager of Connected Car Technology",
+    detail:
+      "Managed support and product development for connected vehicles across the US and Canada, building local expertise and global relationships.",
+    highlights: [
+      "Built the US Connected Car team as a local extension of global incident, helpdesk, and quality teams.",
+      "Delivered a 90% reduction in customer-facing mobile app defects and reduced support cases by 75%.",
+      "Oversaw a 100,000+ paid subscriber base, increasing monthly active users by 20% and reducing churn by 25%.",
+      "Led global delivery of a 3G-to-4G LTE upgrade solution for legacy vehicles."
+    ]
+  },
+  {
+    id: "datamotion",
+    dates: "2013 - 2016",
+    place: "DataMotion, Inc.",
+    logo: "https://mattsignorello.com/wp-content/uploads/2020/04/dm-icon.png",
+    title: "Director of SaaS Implementation & Support",
+    detail:
+      "Led implementation, sales engineering, and technical operations for SaaS encrypted email and file transfer products serving regulated industries.",
+    highlights: [
+      "Scaled technical operations and support across infrastructure, sales engineering, and customer service.",
+      "Built an internal virtualization stack using Hyper-V, NetApp, and open-source tools.",
+      "Reduced mid-sized deal close time by 50% and increased large-deal profitability by 25% through enterprise support agreements.",
+      "Established the department as a corporate revenue driver through professional services and high-value SLAs."
+    ]
+  },
+  {
+    id: "matthijssen",
+    dates: "2010 - 2013",
+    place: "Matthijssen, Inc.",
+    logoText: "M",
+    title: "Business Development Representative",
+    detail:
+      "Sold technology solutions covering workstations, servers, networking, virtualization, and managed technical support.",
+    highlights: [
+      "Retained 85% of the existing customer base through customer engagement and consulting."
+    ]
+  },
+  {
+    id: "ispbx",
+    dates: "2005 - 2011",
+    place: "ISPBX, LLC.",
+    logo: "https://mattsignorello.com/wp-content/uploads/2020/04/ispbx-icon-1.png",
+    title: "Co-Founder, Owner",
+    detail:
+      "Telecom company that made Linux-based VoIP PBX systems with a proprietary drag-and-drop GUI interface.",
+    highlights: [
+      "Led recurring revenue generation through SIP calling services, co-location, hardware sales, and IT consulting.",
+      "Owned sales, marketing, support, and programming to build annual revenue of more than $250K."
+    ]
+  }
+];
+
+const competencies = [
+  "Leadership",
+  "Product Management",
+  "Engineering Management",
+  "Digital Transformations",
+  "KPI / OKR Development",
+  "Revenue Growth",
+  "Marketing Strategy",
+  "Business Development",
+  "Sales Engineering",
+  "Agile / SAFe / Scrum",
+  "SaaS / API Platforms",
+  "HubSpot / Salesforce",
+  "Cloud (AWS / Azure)",
+  "Linux / Windows / Mac",
+  "Docker / Virtualization",
+  "Claude / OpenAI"
+];
+
+const certificates = [
+  {
+    code: "PMP",
+    title: "Certificate in Project Management with PMP",
+    detail:
+      "County College of Morris, June 2018. Practical skills to initiate, plan, execute, monitor, control, and close projects."
+  },
+  {
+    code: "GRW",
+    title: "Certified Growth Hacker",
+    detail:
+      "Basics around the philosophy and process of understanding what drives growth of a product or service. April 2019."
+  },
+  {
+    code: "CSPO",
+    title: "Certified Scrum Product Owner",
+    detail:
+      "Working with business to define and build agile technology solutions that solve business and consumer problems."
+  },
+  {
+    code: "CSM",
+    title: "Certified ScrumMaster",
+    detail:
+      "Leveraging the Scrum framework to protect the team from internal and external business distractions."
+  }
+];
+---
+
+<BaseLayout
+  title="Product Organization & Technology Leadership Resume - Matt Signorello"
+  description="Matt Signorello's resume: product organization leadership, digital platforms, connected vehicle technology, engineering management, SaaS implementation, and operating-model design."
+  schema={{
+    "@type": "WebPage",
+    "@id": "https://mattsignorello.com/resume/#webpage",
+    url: "https://mattsignorello.com/resume/",
+    name: "Product Organization and Technology Leadership Resume - Matt Signorello",
+    about: { "@id": "https://mattsignorello.com/#person" },
+    isPartOf: { "@id": "https://mattsignorello.com/#website" }
+  }}
+>
+  <main class="wrap">
+    <header class="page-header">
+      <p class="eyebrow">Resume</p>
+      <h1>Product organization and technology leadership.</h1>
+      <p class="section-copy">
+        I build product teams, operating models, digital platforms, and delivery
+        systems across global enterprises, connected vehicles, SaaS, and small
+        business environments.
+      </p>
+    </header>
+
+    <section class="section resume-experience">
+      <div class="resume-section-head">
+        <p class="eyebrow">Experience</p>
+        <h2>Professional timeline.</h2>
+        <p class="section-copy">
+          Roles where product strategy, engineering, operations, customer experience,
+          and hands-on technology came together.
+        </p>
+      </div>
+      <div class="resume-timeline">
+        {experience.map((item) => (
+          <article class="resume-card" id={item.id}>
+            <div class="resume-card-meta">
+              <span class="resume-date">{item.dates}</span>
+              <div class="resume-company">
+                {item.logo ? (
+                  <img
+                    src={item.logo}
+                    alt={`${item.place} logo`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="resume-logo-fallback">{item.logoText ?? item.place.charAt(0)}</span>
+                )}
+                <h3>{item.place}</h3>
+              </div>
+            </div>
+            <div class="resume-card-copy">
+              <p class="resume-title">{item.title}</p>
+              <p>{item.detail}</p>
+              {item.highlights && (
+                <ul>
+                  {item.highlights.map((highlight) => <li>{highlight}</li>)}
+                </ul>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-grid section">
+      <div>
+        <p class="eyebrow">Education</p>
+        <h2>Formal background.</h2>
+      </div>
+      <div class="service-list">
+        {education.map((item) => (
+          <article class="service">
+            <div class="code">{item.dates.slice(0, 4)}</div>
+            <div>
+              <h3>{item.place}</h3>
+              <p><strong>{item.title}</strong></p>
+              <p>{item.detail}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-grid section">
+      <div>
+        <p class="eyebrow">Skills</p>
+        <h2>Core competencies.</h2>
+      </div>
+      <div class="skill-cloud">
+        {competencies.map((skill) => <span>{skill}</span>)}
+      </div>
+    </section>
+
+    <section class="section-grid section">
+      <div>
+        <p class="eyebrow">Certificates</p>
+        <h2>Credentials and training.</h2>
+      </div>
+      <div class="service-list">
+        {certificates.map((item) => (
+          <article class="service">
+            <div class="code">{item.code}</div>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.detail}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

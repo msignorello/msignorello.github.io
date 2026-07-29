@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const articles = (await getCollection("articles")).sort(
+  (a, b) => Date.parse(b.data.date) - Date.parse(a.data.date)
+);
+
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  }).format(new Date(`${date}T00:00:00`));
+
+const collectionSchema = {
+  "@type": "CollectionPage",
+  "@id": "https://mattsignorello.com/writing/#collection",
+  url: "https://mattsignorello.com/writing/",
+  name: "Product Leadership Articles and Essays by Matt Signorello",
+  description:
+    "Original writing on product organizations, technology teams, operating models, AI, career resilience, and practical execution.",
+  author: { "@id": "https://mattsignorello.com/#person" },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: articles.length,
+    itemListElement: articles.map((article, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://mattsignorello.com/writing/${article.slug}/`,
+      name: article.data.title
+    }))
+  }
+};
+---
+
+<BaseLayout
+  title="Product Leadership Articles & Essays - Matt Signorello"
+  description="Original articles by Matt Signorello on product organization leadership, technology teams, operating models, AI, career resilience, and practical execution."
+  schema={collectionSchema}
+>
+  <main class="wrap">
+    <header class="page-header">
+      <p class="eyebrow">Writing</p>
+      <h1>Ideas tested in the real world.</h1>
+      <p class="section-copy">
+        Original articles on building product organizations, leading technology
+        teams, navigating change, using AI responsibly, and making complicated
+        systems work in practice.
+      </p>
+    </header>
+
+    <section class="writing-rollup section" aria-label="Article list">
+      {articles.map((article) => (
+        <article class="writing-row">
+          <div class="writing-date">
+            <span>{formatDate(article.data.date)}</span>
+            {article.data.featured && <strong>Featured</strong>}
+          </div>
+          <div class="writing-summary">
+            <div class="tag">{article.data.tags.slice(0, 3).join(" / ")}</div>
+            <h2><a href={`/writing/${article.slug}/`}>{article.data.title}</a></h2>
+            <p>{article.data.description}</p>
+            <div class="writing-actions">
+              <a class="text-link" href={`/writing/${article.slug}/`}>Read article</a>
+              {article.data.linkedinUrl && (
+                <a class="source-link" href={article.data.linkedinUrl} target="_blank" rel="noreferrer">
+                  LinkedIn original
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,222 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  ogType?: "website" | "article";
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  image = "/images/article-systems-motif.png",
+  imageAlt = "Matt Signorello - product organization and technology leadership",
+  ogType = "website",
+  schema
+} = Astro.props;
+const siteOrigin = "https://mattsignorello.com";
+const canonical = new URL(Astro.url.pathname, siteOrigin).toString();
+const socialImage = new URL(image, siteOrigin).toString();
+const currentPath = Astro.url.pathname;
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const additionalSchema = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteOrigin}/#person`,
+      name: "Matt Signorello",
+      url: `${siteOrigin}/`,
+      jobTitle: "Product Organization and Technology Leader",
+      description:
+        "Product organization and technology leader who builds teams, operating models, digital platforms, and delivery systems.",
+      image:
+        "https://mattsignorello.com/wp-content/uploads/2020/04/Cropped_Headshot_1-jpg-2.jpg",
+      knowsAbout: [
+        "Product organization leadership",
+        "Digital product management",
+        "Engineering leadership",
+        "Connected vehicle platforms",
+        "SaaS implementation",
+        "Technology operations"
+      ],
+      sameAs: [
+        "https://www.linkedin.com/in/matt-signorello/",
+        "https://techbootllc.com/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteOrigin}/#website`,
+      url: `${siteOrigin}/`,
+      name: "Matt Signorello",
+      description:
+        "Product organization and technology leadership, practical writing, and selected personal projects.",
+      author: { "@id": `${siteOrigin}/#person` }
+    },
+    ...additionalSchema
+  ]
+};
+const navGroups = [
+  {
+    label: "Work",
+    items: [
+      { href: "/writing/", label: "Thinking" },
+      { href: "/resume/", label: "Resume" }
+    ]
+  },
+  {
+    label: "Personal",
+    items: [
+      { href: "/features/arcade/", label: "Arcade" },
+      { href: "/features/lucy/", label: "Lucy" }
+    ]
+  }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Matt Signorello - Writing"
+      href="/rss.xml"
+    />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Matt Signorello" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    {gaMeasurementId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script define:vars={{ gaMeasurementId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          window.gtag = gtag;
+          gtag("js", new Date());
+          gtag("config", gaMeasurementId);
+        </script>
+      </>
+    )}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Matt Signorello home">
+          <span class="brand-mark">MS</span>
+          <span class="brand-copy">
+            <strong>Matt Signorello</strong>
+            <span>Product organizations / technology</span>
+          </span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          {navGroups.map((group) => (
+            <div class="nav-group">
+              <span>{group.label}</span>
+              {group.items.map((item) => (
+                <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          ))}
+        </nav>
+        <a class="desktop-cta nav-cta" href="/contact/" aria-current={currentPath === "/contact/" ? "page" : undefined}>
+          <span></span>
+          Start
+        </a>
+        <button class="menu-button" type="button" aria-label="Explore the site" aria-expanded="false" data-menu-button>
+          <span class="menu-label" data-menu-label>Explore</span>
+          <span class="menu-icon" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+        </button>
+      </div>
+      <nav class="mobile-nav wrap" aria-label="Mobile navigation" data-mobile-nav>
+        {navGroups.map((group) => (
+          <div class="mobile-nav-group">
+            <span>{group.label}</span>
+            {group.items.map((item) => (
+              <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))}
+          </div>
+        ))}
+        <a href="/contact/">Contact</a>
+      </nav>
+    </header>
+    <slot />
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          Matt Signorello. Product organizations, technology, and useful systems.
+          <a href="/privacy/">Privacy</a>
+        </p>
+      </div>
+    </footer>
+    <script>
+      const menuButton = document.querySelector("[data-menu-button]");
+      const mobileNav = document.querySelector("[data-mobile-nav]");
+      const menuLabel = menuButton?.querySelector("[data-menu-label]");
+
+      menuButton?.addEventListener("click", () => {
+        const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+        menuButton.setAttribute("aria-expanded", String(!isOpen));
+        menuButton.setAttribute("aria-label", isOpen ? "Explore the site" : "Close site navigation");
+        if (menuLabel) menuLabel.textContent = isOpen ? "Explore" : "Close";
+        mobileNav?.toggleAttribute("data-open", !isOpen);
+      });
+    </script>
+    <script>
+      document.addEventListener("click", (event) => {
+        const target = event.target instanceof Element ? event.target.closest("a[href]") : null;
+        if (!target || typeof window.gtag !== "function") return;
+
+        const href = target.getAttribute("href");
+        if (!href) return;
+
+        const url = new URL(href, window.location.href);
+        const isEmail = href.startsWith("mailto:");
+        const isOutbound = url.hostname !== window.location.hostname;
+
+        if (isEmail || isOutbound) {
+          window.gtag("event", "outbound_click", {
+            link_url: target.href,
+            link_text: target.textContent?.trim() ?? "",
+            transport_type: "beacon"
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

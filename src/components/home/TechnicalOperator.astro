@@ -1,0 +1,44 @@
+---
+interface TechnicalLoopStep {
+  number: string;
+  label: string;
+  title: string;
+  text: string;
+}
+
+interface Props {
+  steps: TechnicalLoopStep[];
+}
+
+const { steps } = Astro.props;
+---
+
+<section class="technical-operator-band" id="technical-operator" aria-labelledby="technical-operator-title">
+  <div class="wrap technical-operator-inner">
+    <header class="technical-operator-intro">
+      <div>
+        <p class="eyebrow">The technical operator's view</p>
+        <h2 id="technical-operator-title">Find the root cause. Build the right thing. Own what happens next.</h2>
+      </div>
+      <p>
+        My engineering and support background means I do not stop at the roadmap. I trace root
+        causes, break complicated systems into manageable parts, test technical viability against
+        user value, and follow products through deployment and operation.
+      </p>
+    </header>
+
+    <ol class="technical-loop">
+      {steps.map((step) => (
+        <li>
+          <div class="technical-loop-label">
+            <span>{step.number}</span>
+            <p>{step.label}</p>
+          </div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+
+  </div>
+</section>

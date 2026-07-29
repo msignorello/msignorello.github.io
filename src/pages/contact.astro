@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Contact Matt Signorello - Product & Technology Leadership"
+  description="Contact Matt Signorello about product organization leadership, digital platforms, operating-model design, consulting, advisory work, or senior technology roles."
+  schema={{
+    "@type": "ContactPage",
+    "@id": "https://mattsignorello.com/contact/#webpage",
+    url: "https://mattsignorello.com/contact/",
+    name: "Contact Matt Signorello",
+    about: { "@id": "https://mattsignorello.com/#person" },
+    isPartOf: { "@id": "https://mattsignorello.com/#website" }
+  }}
+>
+  <main class="wrap">
+    <header class="page-header">
+      <p class="eyebrow">Contact</p>
+      <h1>Reach out directly.</h1>
+      <p class="section-copy">
+        For consulting, product organization and technology leadership, advisory work,
+        or interesting opportunities, email me directly or connect through LinkedIn.
+      </p>
+    </header>
+
+    <section class="section section-grid">
+      <div>
+        <h2>No intake maze.</h2>
+        <p class="section-copy">
+          I am based in the New York / New Jersey area, about 40 minutes outside
+          midtown Manhattan and close to major airports and train stations.
+        </p>
+        <p class="section-copy">
+          The fastest path is a short email with what you are trying to solve, where
+          things stand today, and what kind of help you think might be useful.
+        </p>
+      </div>
+
+      <div class="contact-options" aria-label="Contact options">
+        <a class="contact-card" href="mailto:matt@mattsignorello.com">
+          <span>Email</span>
+          <strong>matt@mattsignorello.com</strong>
+          <p>Best for consulting, advisory, job, or collaboration conversations.</p>
+        </a>
+        <a class="contact-card" href="https://www.linkedin.com/in/matt-signorello/" target="_blank" rel="noreferrer">
+          <span>LinkedIn</span>
+          <strong>Connect on LinkedIn</strong>
+          <p>Useful for professional context, shared connections, and article discussion.</p>
+        </a>
+        <a class="contact-card" href="https://techbootllc.com/" target="_blank" rel="noreferrer">
+          <span>Consulting</span>
+          <strong>TechBoot LLC</strong>
+          <p>My small business technology and consulting work lives there.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

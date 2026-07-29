@@ -1,0 +1,182 @@
+---
+import { getCollection } from "astro:content";
+import OperatorNotebook from "../components/home/OperatorNotebook.astro";
+import SelectedStories from "../components/home/SelectedStories.astro";
+import TechnicalOperator from "../components/home/TechnicalOperator.astro";
+import WhatIBuild from "../components/home/WhatIBuild.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  buildAreas,
+  curatedArticleSlugs,
+  personalityCaptions,
+  principles,
+  selectedStories,
+  technicalLoopSteps
+} from "../data/homepage";
+
+const allArticles = await getCollection("articles");
+const curatedArticles = curatedArticleSlugs
+  .map((slug) => allArticles.find((article) => article.slug === slug))
+  .filter((article): article is (typeof allArticles)[number] => Boolean(article));
+
+const formatArticleDate = (date: string) =>
+  new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(
+    new Date(`${date}T00:00:00`)
+  );
+---
+
+<BaseLayout
+  title="Product Organization & Technology Leadership - Matt Signorello"
+  description="Matt Signorello makes complex products, organizations, platforms, and technical systems work better through product leadership, operating models, and practical execution."
+  schema={{
+    "@type": "ProfilePage",
+    "@id": "https://mattsignorello.com/#profile",
+    url: "https://mattsignorello.com/",
+    name: "Matt Signorello - Product Organization and Technology Leader",
+    description:
+      "Matt Signorello builds product organizations, operating models, digital platforms, and delivery systems.",
+    mainEntity: { "@id": "https://mattsignorello.com/#person" }
+  }}
+>
+  <main>
+    <div class="wrap">
+      <section class="hero-grid home-hero">
+        <div class="hero">
+          <p class="eyebrow">Product leadership / customer outcomes / technology operations</p>
+          <h1>Making complex things <span>actually work.</span></h1>
+          <p class="hero-support">
+            I build product organizations, digital platforms, and operating models that
+            help teams move faster, make better decisions, and deliver things people
+            actually use.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#work">Explore my work</a>
+            <a class="button" href="/writing/">Read my thinking</a>
+          </div>
+          <div class="hero-proof" aria-label="Leadership focus areas">
+            <span>Organizations</span>
+            <span>Platforms</span>
+            <span>Momentum</span>
+          </div>
+        </div>
+
+        <aside class="status-card home-status-card">
+          <div class="status-photo">
+            <img
+              src="https://mattsignorello.com/wp-content/uploads/2020/04/Cropped_Headshot_1-jpg-2.jpg"
+              alt="Matt Signorello"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          <div class="status-copy">
+            <div>
+              <h2>Matt Signorello</h2>
+              <p>Product organization and technology leader based in NY/NJ.</p>
+              <div class="personality-rotator" aria-label="A few things about Matt">
+                {personalityCaptions.map((caption) => <span>{caption}</span>)}
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </div>
+
+    <OperatorNotebook principles={principles} />
+
+    <div class="wrap">
+      <WhatIBuild areas={buildAreas} />
+    </div>
+
+    <TechnicalOperator steps={technicalLoopSteps} />
+
+    <div class="wrap">
+      <SelectedStories stories={selectedStories} />
+
+      <section class="home-section thinking-section" id="thinking" aria-labelledby="thinking-title">
+        <div class="thinking-head">
+          <div>
+            <p class="eyebrow">Thinking behind the work</p>
+            <h2 id="thinking-title">Good technology is built twice.</h2>
+          </div>
+          <blockquote>First in people's heads. Then in code.</blockquote>
+        </div>
+
+        <div class="thinking-layout">
+          {curatedArticles.map((article, index) => (
+            <article class={`thinking-story ${index === 0 ? "thinking-feature" : ""}`}>
+              {article.data.coverImage && (
+                <a class="thinking-image" href={`/writing/${article.slug}/`} aria-label={`Read ${article.data.title}`}>
+                  <img
+                    src={article.data.coverImage.src}
+                    alt={article.data.coverImage.alt}
+                    width="1600"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              )}
+              <div class="thinking-copy">
+                <p>{article.data.tags[0] ?? "Essay"} / {formatArticleDate(article.data.date)}</p>
+                <h3><a href={`/writing/${article.slug}/`}>{article.data.title}</a></h3>
+                <p>{article.data.description}</p>
+                <a class="thinking-link" href={`/writing/${article.slug}/`}>Read the piece <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <a class="archive-link" href="/writing/">Browse the full writing archive <span aria-hidden="true">→</span></a>
+      </section>
+    </div>
+
+    <section class="beyond-band" id="beyond" aria-labelledby="beyond-title">
+      <div class="wrap beyond-inner">
+        <div class="beyond-intro">
+          <p class="eyebrow">Beyond the work</p>
+          <h2 id="beyond-title">Things that keep me curious.</h2>
+          <p>
+            Leadership is part of the story. So are old machines, practical repairs,
+            family, and a French bulldog with excellent management instincts.
+          </p>
+        </div>
+        <div class="beyond-gallery">
+          <a class="beyond-feature beyond-arcade" href="/features/arcade/">
+            <img
+              src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=82"
+              alt="Classic arcade cabinets"
+              loading="lazy"
+              decoding="async"
+            />
+            <span><small>Systems you can touch</small>The arcade</span>
+          </a>
+          <a class="beyond-feature beyond-lucy" href="/features/lucy/">
+            <img
+              src="https://mattsignorello.com/wp-content/uploads/2020/04/lucy-shark.png"
+              alt="Lucy the French bulldog in a shark costume"
+              loading="lazy"
+              decoding="async"
+            />
+            <span><small>Branch manager emeritus</small>Lucy</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-close">
+      <div class="wrap contact-close-inner">
+        <div>
+          <p class="eyebrow">A difficult problem is a good place to start</p>
+          <h2>Have something complicated that needs to move?</h2>
+        </div>
+        <div>
+          <p>
+            I am always open to a thoughtful conversation about leadership roles,
+            product organizations, technical platforms, or consulting work.
+          </p>
+          <a class="button contact-button" href="/contact/">Start a conversation <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

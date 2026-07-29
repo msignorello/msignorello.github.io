@@ -1,0 +1,439 @@
+---
+title: "How We Migrated from pfSense to OPNsense with Codex"
+description: "A practical case study in using Codex, the OPNsense API, SSH, backups, and packet captures to migrate a production firewall from pfSense safely."
+date: "2026-07-18"
+updated: "2026-07-18"
+tags: ["Technology", "AI", "Operations"]
+featured: false
+coverImage:
+  src: "/images/articles/pfsense-opnsense-codex-migration.png"
+  alt: "Abstract network firewall migration diagram with routed paths and verification checkpoints"
+  caption: "Firewall migration / API control plane / packet-path verification"
+cta:
+  label: "Start a conversation"
+  href: "/contact/"
+---
+
+Moving from pfSense to OPNsense sounds straightforward until the old firewall has years of accumulated responsibility.
+
+Ours was not just routing packets between a LAN and the internet. It managed DHCP reservations, local DNS, dynamic DNS, multiple WAN paths, remote-access VPN users, an outbound commercial VPN, policy routing, port forwards, certificates, aliases, and rules whose importance was sometimes clearer from their effects than from their names.
+
+There was no safe one-click conversion. A pfSense backup could tell us what the old system contained, but it could not reliably become an OPNsense configuration. The two projects share ancestry, yet their configuration models, service implementations, plugins, and generated firewall rules differ in important ways.
+
+We used Codex to bridge that gap.
+
+Codex read the pfSense XML, helped turn the old configuration into a migration inventory, queried and modified OPNsense through its API, used SSH to inspect runtime state, and helped diagnose packet flows when the configured result did not match the intended result. The human operator still controlled the physical cutover, approved consequential changes, reset credentials, and tested from real client devices.
+
+That division of labor was the key. Codex could work quickly across a large configuration, but the migration remained a collaborative network-engineering exercise rather than an unsupervised automation run.
+
+> Codex made the migration practical because API access turned the router into an inspectable and reversible system, not because AI made routing problems disappear.
+
+## What Codex brought to the migration
+
+The most useful capability was not generating configuration from scratch. It was maintaining context across the entire migration.
+
+A person working only in the web interface must remember how an alias relates to a rule, how that rule selects a gateway, how NAT treats the interface, and how the return path is enforced. Codex could trace those relationships across every layer.
+
+<figure class="article-visual migration-control-plane">
+  <div class="article-visual-label">Migration control plane</div>
+  <div class="visual-flow">
+    <div class="visual-node visual-source">
+      <span>01 / READ</span>
+      <strong>pfSense backup</strong>
+      <small>History, settings, dependencies</small>
+    </div>
+    <i aria-hidden="true"></i>
+    <div class="visual-node visual-agent">
+      <span>02 / REASON</span>
+      <strong>Codex</strong>
+      <small>Inventory, intent, migration plan</small>
+    </div>
+    <i aria-hidden="true"></i>
+    <div class="visual-node visual-control">
+      <span>03 / APPLY</span>
+      <strong>OPNsense API</strong>
+      <small>Bounded, reviewable changes</small>
+    </div>
+    <i aria-hidden="true"></i>
+    <div class="visual-node visual-proof">
+      <span>04 / PROVE</span>
+      <strong>SSH + packets</strong>
+      <small>Routes, PF rules, live traffic</small>
+    </div>
+  </div>
+  <figcaption>Configuration described the intent. Runtime evidence proved the result.</figcaption>
+</figure>
+
+## Before starting: establish the control plane
+
+Codex needs a reliable way to inspect the destination router before it can safely change it. For this project, that meant two complementary access paths:
+
+1. **The OPNsense API** for structured configuration reads and controlled changes.
+2. **SSH** for runtime evidence such as route tables, interface state, service logs, compiled firewall rules, and packet captures.
+
+Our first MCP connector attempt failed inside a Windows TLS layer before reaching OPNsense. A direct Node/OpenSSL request reached the router and returned HTTP 403, narrowing the remaining problem to authorization.
+
+That distinction mattered. The migration crossed version-specific controllers for DHCP, DNS, VPNs, certificates, aliases, rules, NAT, policy routing, and multi-WAN monitoring. We needed exact requests and responses, including controllers the connector did not expose. Direct API access gave us that visibility.
+
+SSH completed the control plane by showing what the router actually built: routes, interfaces, service logs, compiled `pf` rules, and packet captures. An accepted API request proved that configuration was stored. It did not prove that packets followed the intended path.
+
+The episode produced a diagnostic sequence worth reusing:
+
+- Confirm TCP reachability to the router.
+- Confirm the client can negotiate TLS and send an HTTP request.
+- Confirm that OPNsense recognizes and authorizes the API credentials.
+- Confirm that the controller and action exist in the installed OPNsense version.
+
+MCP remains useful when a connector covers the target system and exposes enough diagnostic detail. Here it was an optional adapter, not the source of truth or the only route to the firewall.
+
+API credentials and administrative passwords should be treated as temporary operational secrets. Do not paste them into articles, logs, scripts committed to source control, or reusable prompts. Rotate any credential exposed during troubleshooting.
+
+## The migration method: audit, plan, apply, verify
+
+<figure class="article-visual migration-loop">
+  <div class="article-visual-label">One bounded change at a time</div>
+  <div class="loop-flow">
+    <div><span>01</span><strong>Audit</strong><small>Read without changing</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>02</span><strong>Plan</strong><small>Map behavior and dependencies</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>03</span><strong>Apply</strong><small>Back up, change, compare</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>04</span><strong>Verify</strong><small>Test the live packet path</small></div>
+  </div>
+  <figcaption>Repeat the loop until every migrated behavior is explicit and tested.</figcaption>
+</figure>
+
+Broad instructions such as “make the new router match the old one” would have hidden too many consequential decisions inside one task.
+
+### 1. Inventory intent, not settings
+
+We treated the pfSense backup XML as evidence, not as an import file. The important question was not, “Where is the equivalent checkbox?” It was, “What behavior was this configuration trying to create?”
+
+That distinction exposed dependencies and prevented stale users, obsolete forwards, and package-specific settings from being migrated automatically.
+
+```text
+Read the pfSense backup at <PATH_TO_CONFIG_XML>.
+
+Create an inventory of:
+- interfaces, VLANs, gateways, DHCP, and DNS
+- users, certificate authorities, and certificates
+- VPN servers, VPN clients, aliases, firewall rules, and NAT
+- dynamic DNS, monitoring, and installed packages
+
+For each item, explain the intended behavior and its dependencies. Flag anything
+without a direct OPNsense equivalent.
+
+Then compare the inventory with OPNsense using read-only API checks. Report what
+already exists, what is missing, what conflicts, and what should be retired.
+Do not make changes or expose credentials.
+```
+
+### 2. Map and stage the destination
+
+We decided the topology before enabling services:
+
+<figure class="article-visual network-topology">
+  <div class="article-visual-label">Destination topology</div>
+  <div class="topology-layout">
+    <div class="topology-side">
+      <div><span>PRIMARY LAN</span><strong>10.13.31.0/24</strong></div>
+      <div><span>REMOTE VPN</span><strong>10.13.30.0/24</strong></div>
+    </div>
+    <i aria-hidden="true"></i>
+    <div class="topology-router">
+      <span>CONTROL POINT</span>
+      <strong>OPNsense</strong>
+      <small>Policy / NAT / DNS / VPN</small>
+    </div>
+    <i aria-hidden="true"></i>
+    <div class="topology-side">
+      <div><span>WIRED WAN</span><strong>Primary path</strong></div>
+      <div><span>CELLULAR</span><strong>10.13.32.2 → 10.13.32.1</strong></div>
+    </div>
+  </div>
+  <figcaption>The interface map was agreed before cables moved or services activated.</figcaption>
+</figure>
+
+Codex prepared the logical configuration. The operator still identified physical ports, moved cables, and preserved a management path. An agent can reason about interface names; it cannot see which cable is in your hand.
+
+Services were staged in dependency order and left inactive until the related cutover step. Aliases came before policy rules, certificate authorities before user certificates, and routes before access tests. DHCP reservations and local DNS records were prepared before Dnsmasq was enabled.
+
+```text
+Prepare the agreed interface mapping and show its dependencies and rollback plan.
+Preserve the current management path. Do not move the default route yet.
+
+Migrate the DHCP scope, static reservations, and local DNS records, but leave the
+new DHCP service disabled. Validate duplicate IPs, duplicate MAC addresses,
+out-of-scope reservations, and malformed hostnames.
+
+Read the staged configuration back and show exactly what remains inactive.
+Wait for explicit approval before cutover.
+```
+
+### 3. Rebuild remote access with separate identities
+
+Rather than copy shared identities forward, we created a new certificate authority, a new OpenVPN server, and separate user certificates. The server used `10.13.30.0/24`, pushed the authorized internal routes, and supplied the internal DNS server.
+
+Testing uncovered a useful distinction: a remote client could reach the main LAN but not `10.13.32.1`. The fix required a client route, an OpenVPN firewall rule, and a return path from the cellular segment. A narrowly scoped source NAT rule supplied that return path without changing the upstream cellular device.
+
+```text
+Create a new certificate authority and OpenVPN server for <VPN_CIDR>.
+Require both a client certificate and username/password authentication.
+
+Create separate users for <USER_LIST>, each with an individual certificate.
+Push routes for <AUTHORIZED_INTERNAL_SUBNETS> and DNS server <INTERNAL_DNS_IP>.
+Add only the firewall and NAT rules required for those destinations.
+
+Take a configuration backup first. Do not print credentials, private keys, or
+complete client profiles. Verify routes, compiled rules, DNS, and access from
+an actual VPN client afterward.
+```
+
+### 4. Treat policy routing as a complete path
+
+The AirVPN client applied only to systems in a `VPNAccess` alias. The design was evaluated as one chain:
+
+```text
+source alias -> firewall policy -> VPN gateway -> outbound NAT -> return path
+```
+
+That chain exposed a subtle port-forward failure. Inbound SYN packets reached the internal service, which produced SYN-ACK responses, but those responses never left the AirVPN interface. Packet captures and compiled PF rules showed that the generated inbound rule lacked the required `reply-to`.
+
+Replacing it with an explicit rule tied to the AirVPN gateway restored the symmetric path. This was where Codex was most useful: it could compare the intended configuration, generated rule set, and packet evidence together.
+
+```text
+Migrate the <VPN_PROVIDER> client and policy-route only hosts in <SOURCE_ALIAS>
+through its gateway. Add a kill switch so those hosts cannot silently use the
+normal WAN.
+
+Validate the complete path from source alias through the return route. If a
+client cannot reach a destination that the router can, inspect the client route,
+ingress policy, selected gateway, outbound NAT, destination response, and return
+interface.
+
+Capture on both ingress and egress. Show where the flow stops before changing
+anything, then propose the narrowest fix and rollback procedure.
+```
+
+## 5. Test failover as a complete client path
+
+Our initial cellular-WAN checks looked reassuring. The interface had carrier, OPNsense could reach the upstream device at `10.13.32.1`, and traffic sourced from `10.13.32.2` could reach the public internet. A `WAN_Failover` gateway group also existed in the configuration.
+
+We treated those facts as evidence that failover was ready. They were not.
+
+During a later physical failover test, disconnecting the primary WAN caused all ordinary LAN internet access to stop. The OPNsense logs showed that the primary link went down and, about eleven seconds later, the system default route correctly changed to `10.13.32.1`. Direct tests through the 5G connection still succeeded. The cellular service was healthy, and the router had selected it.
+
+The missing link was outbound NAT for forwarded LAN traffic.
+
+The only cellular NAT rule was one we had created earlier so LAN clients could reach the directly connected cellular-management network:
+
+```text
+Interface:   CellularBackup
+Source:      LAN net
+Destination: CellularBackup net (10.13.32.0/24)
+Translation: CellularBackup interface address
+```
+
+The compiled PF rule was effectively:
+
+```text
+nat on igb0 from 10.13.31.0/24 to 10.13.32.0/24
+```
+
+That rule translated traffic going to the cellular device, but not traffic going to the internet. Once failover occurred, packets from `10.13.31.0/24` left through `igb0` without a usable internet NAT translation. The 5G upstream had no return path to those private LAN addresses.
+
+The audit also exposed three secondary weaknesses:
+
+- The gateway group existed, but the general LAN internet rule did not reference it.
+- Monitoring for the cellular gateway was disabled.
+- Failed-gateway state cleanup was disabled, allowing existing sessions and DNS traffic to remain associated with the dead path.
+
+### Why we missed it
+
+The miss was procedural rather than mysterious:
+
+1. We tested `router -> cellular gateway -> internet`, not `LAN client -> OPNsense -> cellular gateway -> internet`.
+2. We confirmed that the gateway group existed without confirming that the LAN rule actually used it.
+3. We inspected the saved NAT entry by purpose and name, but did not initially check its exact destination in the compiled PF rule.
+4. We proved access to the cellular subnet and incorrectly treated that as proof of cellular internet failover.
+5. We did not run a complete failover and failback exercise after the final routing and NAT changes.
+
+This is a recurring risk in firewall work: every individual component can appear healthy while the composed path is incomplete.
+
+### The remediation
+
+We took a fresh configuration backup and made the failover path explicit:
+
+- Changed the cellular outbound NAT rule to match LAN traffic going to **any** destination.
+- Assigned the general LAN internet rule to `WAN_Failover`.
+- Kept the local-subnet exemption and AirVPN-specific policy above that general rule.
+- Enabled default-gateway switching so router-originated services such as Unbound follow failover.
+- Enabled gateway monitoring using separate public monitor addresses for the primary and cellular links.
+- Enabled state cleanup for failover and failback.
+
+The resulting chain became explicit:
+
+<figure class="article-visual failover-path">
+  <div class="article-visual-label">Validated client path</div>
+  <div class="path-flow">
+    <div><span>01</span><strong>LAN client</strong><small>New session</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>02</span><strong>Exemptions</strong><small>Local + VPN policy first</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>03</span><strong>WAN_Failover</strong><small>Select healthy gateway</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>04</span><strong>Outbound NAT</strong><small>Translate on selected WAN</small></div>
+    <i aria-hidden="true"></i>
+    <div><span>05</span><strong>Internet</strong><small>Response returns symmetrically</small></div>
+  </div>
+  <figcaption>Every box could be healthy while the composed path was still broken.</figcaption>
+</figure>
+
+We then marked the primary gateway down through OPNsense's supported gateway state, rather than assuming that configuration alone was proof. During the test:
+
+- The system default route changed to `10.13.32.1`.
+- The compiled LAN rule changed to `route-to (igb0 10.13.32.1)`.
+- LAN-sourced IPv4 traffic reached `1.1.1.1` with zero packet loss.
+- Unbound returned a successful DNS response.
+- Removing the forced-down condition returned both the route and LAN policy to the primary WAN.
+
+> A backup WAN is not operational until a client behind the firewall can create a new session, resolve DNS, reach the internet, and fail back again.
+
+The [OPNsense multi-WAN guide](https://docs.opnsense.org/manual/how-tos/multiwan.html) describes the same essential structure: monitor each gateway, create a tiered group, apply that group through LAN policy routing, exempt traffic intended for the firewall or internal networks, and decide how states should behave during failover.
+
+```text
+Take a fresh configuration backup and audit the complete multi-WAN path.
+
+For every WAN, verify:
+- gateway address, priority, monitor address, and live status
+- membership and tier in the intended gateway group
+- the LAN rule that references that group
+- exemptions for local networks, firewall DNS, and VPN policy
+- outbound NAT from each client network to any internet destination
+- failed-gateway and failback state behavior
+
+Do not declare success because the router can ping through the backup WAN.
+Run controlled failover and restoration. Verify the default route, compiled
+route-to rule, outbound NAT, a new LAN connection, DNS through the firewall,
+and failback to the preferred WAN.
+```
+
+## 6. Make every API change reversible
+
+The most disruptive mistake came from an apparently simple task: changing the router hostname.
+
+Codex initially used an OPNsense “initial setup” API action because it exposed hostname fields. The call succeeded, but the endpoint behaved like a setup wizard and rewrote unrelated gateway, DHCP, and DNS state. The primary WAN gateway disappeared, the default route moved to the cellular path, and LAN internet access failed.
+
+This was not evidence that APIs are unsafe. It was evidence that endpoint scope matters.
+
+Because we had captured the pre-change configuration, Codex could restore the exact backup, verify recovery, and try again using a narrow configuration-object edit. The final diff contained only the hostname and revision metadata. We then tested internet and DNS from an actual LAN client address, not merely from the router.
+
+The incident gave us one of the most important rules of the project:
+
+> An API endpoint being available does not mean it is narrowly scoped. Back up first, use the smallest appropriate operation, and inspect the resulting diff.
+
+Codex can execute a mistaken assumption faster than a person can click through it. Backups and verification are what turn that speed from a liability into an advantage.
+
+```text
+Take a fresh OPNsense configuration backup. Change only <SETTING> to <VALUE>
+using the narrowest supported API operation.
+
+Read the configuration back and diff it against the backup. If unrelated
+gateway, interface, DHCP, DNS, firewall, NAT, VPN, or service settings change,
+stop and restore the backup.
+
+Verify the final result from a real LAN client, not only from the router.
+```
+
+## How we validated the migration
+
+For each feature, Codex distinguished three layers of truth:
+
+1. **Requested state:** the API payload we intended to apply.
+2. **Persisted state:** what OPNsense actually stored.
+3. **Runtime state:** what routes, services, PF rules, and packets showed.
+
+Our reusable troubleshooting sequence became:
+
+1. Verify interface state and addressing.
+2. Inspect the kernel route chosen for the destination.
+3. Inspect the relevant generated firewall and NAT rules.
+4. Capture packets on the ingress interface.
+5. Capture on the expected egress interface.
+6. Confirm whether the destination responds.
+7. Follow the response and verify its return interface.
+8. Repeat the test from the real source network.
+
+This matters because several failures look identical to a user. A missing client route, a blocked firewall rule, absent NAT, an incorrect default gateway, and an asymmetric return path can all appear as “the page does not load.” Codex helped reduce that vague symptom to the exact point at which the packet path failed.
+
+Multi-WAN validation now has its own test matrix:
+
+| Test | What it proves |
+|---|---|
+| Router source through each WAN | The interface and upstream service work |
+| New LAN session through each WAN | Forwarding, policy routing, and outbound NAT work |
+| DNS lookup during failover | Router-originated DNS traffic follows the active gateway |
+| Primary cable disconnected | Link-down detection and physical failover work |
+| Primary upstream unavailable while carrier remains | Gateway monitoring detects a soft failure |
+| Existing and new sessions during transition | State cleanup behaves as intended |
+| Primary service restored | Failback returns traffic to the preferred WAN |
+
+No single row substitutes for the others.
+
+We also confirmed that AES-NI hardware acceleration was exposed to OPNsense and available to the VPN stack. It was a small check, but exactly the sort of migration detail that is easy to omit when attention is focused on basic connectivity.
+
+## Copy/paste cutover checklist
+
+```text
+[ ] Export and securely store the latest pfSense configuration.
+[ ] Export and securely store the current OPNsense configuration.
+[ ] Record physical interface and cable mappings.
+[ ] Preserve a local console or alternate management path.
+[ ] Inventory DHCP, DNS, aliases, gateways, NAT, VPNs, users, and packages.
+[ ] Decide what will migrate, be replaced, or be retired.
+[ ] Stage configuration before enabling services.
+[ ] Confirm API authorization without exposing credentials in chat or logs.
+[ ] Apply one bounded functional group at a time.
+[ ] Diff the stored configuration after unfamiliar API operations.
+[ ] Inspect runtime routes, services, and compiled PF rules.
+[ ] Test from actual LAN, VPN, and policy-routed client addresses.
+[ ] Confirm every WAN has client-network-to-any outbound NAT.
+[ ] Confirm the intended gateway group is referenced by the client firewall rule.
+[ ] Test both physical link loss and upstream failure with carrier still present.
+[ ] Verify raw IPv4, DNS, new sessions, state cleanup, and failback.
+[ ] Capture both directions when a multi-WAN or VPN flow fails.
+[ ] Verify DNS, dynamic DNS, DHCP, internet, and remote access after reboot.
+[ ] Rotate temporary migration credentials and archive the final backup.
+[ ] Record intentionally deferred package features and legacy rules.
+```
+
+## What migrated, and what remained an explicit backlog
+
+The core OPNsense cutover ultimately included:
+
+- LAN addressing, DHCP reservations, and the active scope
+- Local DNS records and VPN-client DNS
+- Dynamic DNS
+- Primary and cellular WAN connectivity
+- Remote OpenVPN with per-user certificates and passwords
+- Access from remote clients to the LAN and cellular segment
+- AirVPN policy routing for selected internal systems
+- An AirVPN inbound port forward with a verified return path
+- Hardware cryptographic acceleration
+
+Other pfSense items remained outside the core migration, including old WAN forwards, legacy users, pfBlockerNG behavior, discovery services, monitoring exporters, and other add-ons. Codex helped identify them, but we intentionally did not equate “present in the backup” with “must be recreated.”
+
+That backlog is a feature, not a failure. It documents the difference between omitted work and consciously retired configuration.
+
+## The larger lesson
+
+Codex did not migrate this network by converting XML from one dialect to another. It helped us reconstruct the intent of the old system and implement that intent through the supported controls of the new one.
+
+The pfSense backup supplied history. The OPNsense API supplied a structured control plane. SSH and packet captures supplied runtime evidence. Backups and diffs supplied reversibility. The operator supplied priorities, physical access, credentials, and final judgment. Codex connected those pieces and retained the context needed to reason across them.
+
+That is why API access made the migration possible. It transformed a risky sequence of GUI changes into small, reviewable transactions. It allowed the agent to inspect before acting, apply repeatable changes, detect unexpected side effects, and recover without rebuilding the router by hand.
+
+The final result was not merely an OPNsense router that behaved like the old pfSense system. It was a network whose important behavior had been made explicit, tested from the correct source networks, and documented well enough to change again.
+
+For a stateful firewall migration, that may be the most valuable outcome of all.

@@ -1,0 +1,49 @@
+---
+interface Story {
+  number: string;
+  title: string;
+  summary: string;
+  metadata: string[];
+  href: string;
+  accent: string;
+}
+
+interface Props {
+  stories: Story[];
+}
+
+const { stories } = Astro.props;
+---
+
+<section class="home-section stories-section" id="stories" aria-labelledby="stories-title">
+  <div class="stories-heading">
+    <div>
+      <p class="eyebrow">Selected stories</p>
+      <h2 id="stories-title">The interesting part is what changed.</h2>
+    </div>
+    <p>
+      A few examples of the systems, teams, and platforms I have helped move forward.
+      The full chronology lives in the résumé.
+    </p>
+  </div>
+  <div class="story-list">
+    {stories.map((story) => (
+      <a class={`story-row story-${story.accent}`} href={story.href}>
+        <div class="story-signal" aria-hidden="true">
+          <span>{story.number}</span>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <div class="story-copy">
+          <div class="story-meta">
+            {story.metadata.map((item) => <span>{item}</span>)}
+          </div>
+          <h3>{story.title}</h3>
+          <p>{story.summary}</p>
+        </div>
+        <span class="story-arrow" aria-hidden="true">↗</span>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,171 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+  return articles.map((article) => ({ params: { slug: article.slug }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const published = new Intl.DateTimeFormat("en", {
+  month: "long",
+  day: "numeric",
+  year: "numeric"
+}).format(new Date(`${article.data.date}T00:00:00`));
+const wordCount = article.body.trim().split(/\s+/).length;
+const readingMinutes = Math.max(1, Math.round(wordCount / 220));
+const articleUrl = `https://mattsignorello.com/writing/${article.slug}/`;
+const articleImage = article.data.socialImage ?? article.data.coverImage?.src;
+const articleImageUrl = articleImage
+  ? new URL(articleImage, "https://mattsignorello.com").toString()
+  : undefined;
+const allArticles = await getCollection("articles");
+const relatedArticles = allArticles
+  .filter((candidate) => candidate.slug !== article.slug)
+  .map((candidate) => ({
+    article: candidate,
+    sharedTags: candidate.data.tags.filter((tag) => article.data.tags.includes(tag)).length
+  }))
+  .sort(
+    (a, b) =>
+      b.sharedTags - a.sharedTags ||
+      Date.parse(b.article.data.date) - Date.parse(a.article.data.date)
+  )
+  .slice(0, 3)
+  .map(({ article: relatedArticle }) => relatedArticle);
+const formatShortDate = (date: string) =>
+  new Intl.DateTimeFormat("en", {
+    month: "short",
+    year: "numeric"
+  }).format(new Date(`${date}T00:00:00`));
+---
+
+<BaseLayout
+  title={`${article.data.title} - Matt Signorello`}
+  description={article.data.description}
+  image={articleImage}
+  imageAlt={article.data.coverImage?.alt ?? article.data.title}
+  ogType="article"
+  schema={[
+    {
+      "@type": "BlogPosting",
+      "@id": `${articleUrl}#article`,
+      headline: article.data.title,
+      description: article.data.description,
+      datePublished: `${article.data.date}T12:00:00Z`,
+      dateModified: `${article.data.updated ?? article.data.date}T12:00:00Z`,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": articleUrl
+      },
+      image: articleImageUrl
+        ? {
+            "@type": "ImageObject",
+            url: articleImageUrl,
+            width: 1600,
+            height: 800
+          }
+        : undefined,
+      author: {
+        "@type": "Person",
+        "@id": "https://mattsignorello.com/#person",
+        name: "Matt Signorello",
+        url: "https://mattsignorello.com/"
+      },
+      publisher: { "@id": "https://mattsignorello.com/#person" },
+      isPartOf: { "@id": "https://mattsignorello.com/#website" },
+      inLanguage: "en-US",
+      articleSection: article.data.tags[0],
+      keywords: article.data.tags.join(", "),
+      wordCount
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${articleUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://mattsignorello.com/"
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Writing",
+          item: "https://mattsignorello.com/writing/"
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: article.data.title,
+          item: articleUrl
+        }
+      ]
+    }
+  ]}
+>
+  <main class="wrap">
+    <article class="article-page">
+      <header class="page-header">
+        <p class="eyebrow">{article.data.tags.join(" / ")}</p>
+        <h1>{article.data.title}</h1>
+        <p class="section-copy">{article.data.description}</p>
+        <div class="article-meta">
+          <span>{published}</span>
+          <span>{readingMinutes} min read</span>
+          {article.data.linkedinUrl && (
+            <a href={article.data.linkedinUrl} target="_blank" rel="noreferrer">Original on LinkedIn</a>
+          )}
+        </div>
+      </header>
+      {article.data.coverImage && (
+        <figure class="article-cover">
+          <div>
+            <img
+              src={article.data.coverImage.src}
+              alt={article.data.coverImage.alt}
+              width="1600"
+              height="800"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          {article.data.coverImage.caption && (
+            <figcaption>{article.data.coverImage.caption}</figcaption>
+          )}
+        </figure>
+      )}
+      <div class="content-body">
+        <Content />
+        {article.data.cta && (
+          <p class="article-cta">
+            <a class="button primary" href={article.data.cta.href}>{article.data.cta.label}</a>
+          </p>
+        )}
+      </div>
+    </article>
+
+    <aside class="article-related" aria-labelledby="related-articles-title">
+      <div class="article-related-head">
+        <p class="eyebrow">Keep reading</p>
+        <h2 id="related-articles-title">Related ideas, different angle.</h2>
+      </div>
+      <div class="related-article-grid">
+        {relatedArticles.map((relatedArticle) => (
+          <article>
+            <p>
+              {relatedArticle.data.tags[0] ?? "Essay"} / {formatShortDate(relatedArticle.data.date)}
+            </p>
+            <h3>
+              <a href={`/writing/${relatedArticle.slug}/`}>{relatedArticle.data.title}</a>
+            </h3>
+            <a href={`/writing/${relatedArticle.slug}/`}>Read article</a>
+          </article>
+        ))}
+      </div>
+    </aside>
+  </main>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+interface Principle {
+  number: string;
+  title: string;
+  text: string;
+}
+
+interface Props {
+  principles: Principle[];
+}
+
+const { principles } = Astro.props;
+---
+
+<section class="notebook-band" id="notebook" aria-labelledby="notebook-title">
+  <div class="wrap notebook-inner">
+    <div class="notebook-intro">
+      <p class="eyebrow">Operator's notebook</p>
+      <h2 id="notebook-title">A few things I believe about leading good work.</h2>
+      <p>Not theory. A leadership contract shaped by products, platforms, teams, and the occasional avoidable mess.</p>
+    </div>
+    <div class="principle-rail">
+      {principles.map((principle) => (
+        <article class="principle">
+          <span>{principle.number}</span>
+          <h3>{principle.title}</h3>
+          <p>{principle.text}</p>
+        </article>
+      ))}
+    </div>
+    <p class="notebook-summary">
+      Give people ownership. Trust their intent. Start with possible. Lead the person.
+    </p>
+  </div>
+</section>

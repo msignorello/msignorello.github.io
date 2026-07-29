@@ -1,0 +1,36 @@
+---
+interface BuildArea {
+  number: string;
+  label: string;
+  statement: string;
+  text: string;
+}
+
+interface Props {
+  areas: BuildArea[];
+}
+
+const { areas } = Astro.props;
+---
+
+<section class="home-section build-section" id="work" aria-labelledby="build-title">
+  <div class="section-lead application-lead">
+    <div>
+      <p class="eyebrow">Where I apply it</p>
+      <h2 id="build-title">Leadership that stays close to the technology.</h2>
+    </div>
+    <p>I work where product strategy, operating models, and technical execution meet.</p>
+  </div>
+  <div class="application-grid">
+    {areas.map((area) => (
+      <article class="application-area">
+        <div class="application-label">
+          <span aria-hidden="true">{area.number}</span>
+          <p>{area.label}</p>
+        </div>
+        <h3>{area.statement}</h3>
+        <p>{area.text}</p>
+      </article>
+    ))}
+  </div>
+</section>
