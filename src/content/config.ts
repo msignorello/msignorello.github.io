@@ -37,6 +37,16 @@ const features = defineCollection({
     heroImage: sharedImage,
     gallery: z.array(sharedImage).default([]),
     facts: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+    testimonials: z
+      .array(
+        z.object({
+          quote: z.string(),
+          name: z.string(),
+          organization: z.string(),
+          image: sharedImage.optional()
+        })
+      )
+      .default([]),
     related: z.array(z.object({ label: z.string(), href: z.string() })).default([])
   })
 });

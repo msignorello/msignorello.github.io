@@ -92,23 +92,42 @@ const featureUrl = `https://mattsignorello.com/features/${feature.slug}/`;
             <h2>{feature.slug === "lucy" ? "A few years in the field." : "Inside the collection."}</h2>
           </div>
           <div class="feature-gallery">
-            <figure class="feature-main">
-              <img
-                src={feature.data.gallery[0].src}
-                alt={feature.data.gallery[0].alt}
-                loading="lazy"
-                decoding="async"
-              />
-              {feature.data.gallery[0].caption && <figcaption>{feature.data.gallery[0].caption}</figcaption>}
-            </figure>
-            <div class="mini-grid">
-              {feature.data.gallery.slice(1, 3).map((image) => (
-                <figure class="feature-tile">
-                  <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-                  {image.caption && <figcaption>{image.caption}</figcaption>}
-                </figure>
-              ))}
-            </div>
+            {feature.data.gallery.slice(0, 3).map((image, index) => (
+              <figure class={index === 0 ? "feature-main" : "feature-tile"}>
+                <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+                {image.caption && <figcaption>{image.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {feature.data.testimonials.length > 0 && (
+        <section class="section feature-testimonials">
+          <div class="feature-section-heading">
+            <p class="eyebrow">Neighborhood talks</p>
+            <h2>Word from the local team.</h2>
+          </div>
+          <div class="feature-testimonial-grid">
+            {feature.data.testimonials.map((testimonial) => (
+              <article class="feature-testimonial">
+                {testimonial.image && (
+                  <img
+                    src={testimonial.image.src}
+                    alt={testimonial.image.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div>
+                  <blockquote><p>{testimonial.quote}</p></blockquote>
+                  <p class="feature-testimonial-byline">
+                    <strong>{testimonial.name}</strong>
+                    <span>{testimonial.organization}</span>
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       )}
