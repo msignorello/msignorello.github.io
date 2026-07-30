@@ -47,66 +47,80 @@ const featureUrl = `https://mattsignorello.com/features/${feature.slug}/`;
     }
   ]}
 >
-  <main class="wrap">
-    <header class="page-header">
-      <p class="eyebrow">{feature.data.eyebrow}</p>
-      <h1>{feature.data.title}</h1>
-      <p class="section-copy">{feature.data.description}</p>
-    </header>
-
-    <section class="section-grid">
-      <div>
-        <figure class="feature-main">
-          <img
-            src={feature.data.heroImage.src}
-            alt={feature.data.heroImage.alt}
-            fetchpriority="high"
-            decoding="async"
-          />
-          {feature.data.heroImage.caption && <figcaption>{feature.data.heroImage.caption}</figcaption>}
-        </figure>
-      </div>
-      <div>
-        <div class="content-body">
-          <Content />
+  <main class={`feature-page feature-${feature.slug}`}>
+    <div class="wrap">
+      <header class="feature-hero">
+        <img
+          src={feature.data.heroImage.src}
+          alt={feature.data.heroImage.alt}
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="feature-hero-shade" aria-hidden="true"></div>
+        <div class="feature-hero-copy">
+          <p class="eyebrow">{feature.data.eyebrow}</p>
+          <h1>{feature.data.title}</h1>
+          <p>{feature.data.description}</p>
         </div>
-        <div class="card-list">
-          {feature.data.facts.map((fact) => (
-            <article class="service">
-              <div class="code">{fact.label.slice(0, 3).toUpperCase()}</div>
-              <div>
-                <h3>{fact.label}</h3>
-                <p>{fact.value}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+        {feature.data.heroImage.caption && <span class="feature-caption">{feature.data.heroImage.caption}</span>}
+      </header>
 
-    {feature.data.gallery.length > 0 && (
-      <section class="section">
-        <p class="eyebrow">Gallery</p>
-        <div class="feature-gallery">
-          <figure class="feature-main">
-            <img
-              src={feature.data.gallery[0].src}
-              alt={feature.data.gallery[0].alt}
-              loading="lazy"
-              decoding="async"
-            />
-            {feature.data.gallery[0].caption && <figcaption>{feature.data.gallery[0].caption}</figcaption>}
-          </figure>
-          <div class="mini-grid">
-            {feature.data.gallery.slice(1, 3).map((image) => (
-              <figure class="feature-tile">
-                <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-                {image.caption && <figcaption>{image.caption}</figcaption>}
-              </figure>
-            ))}
+      <section class="feature-overview">
+        <div class="feature-story">
+          <p class="eyebrow">{feature.slug === "lucy" ? "Why she is here" : "Why it matters"}</p>
+          <div class="content-body">
+            <Content />
           </div>
         </div>
+        <aside class="feature-facts" aria-label={`${feature.data.title} at a glance`}>
+          <p class="eyebrow">At a glance</p>
+          <dl>
+            {feature.data.facts.map((fact, index) => (
+              <div>
+                <dt><span>{String(index + 1).padStart(2, "0")}</span>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
       </section>
-    )}
+
+      {feature.data.gallery.length > 0 && (
+        <section class="section feature-gallery-section">
+          <div class="feature-section-heading">
+            <p class="eyebrow">Gallery</p>
+            <h2>{feature.slug === "lucy" ? "A few years in the field." : "Inside the collection."}</h2>
+          </div>
+          <div class="feature-gallery">
+            <figure class="feature-main">
+              <img
+                src={feature.data.gallery[0].src}
+                alt={feature.data.gallery[0].alt}
+                loading="lazy"
+                decoding="async"
+              />
+              {feature.data.gallery[0].caption && <figcaption>{feature.data.gallery[0].caption}</figcaption>}
+            </figure>
+            <div class="mini-grid">
+              {feature.data.gallery.slice(1, 3).map((image) => (
+                <figure class="feature-tile">
+                  <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+                  {image.caption && <figcaption>{image.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {feature.data.related.length > 0 && (
+        <nav class="feature-related" aria-label="Keep exploring">
+          <span>Keep exploring</span>
+          {feature.data.related.map((item) => (
+            <a href={item.href}>{item.label}<span aria-hidden="true">&rarr;</span></a>
+          ))}
+        </nav>
+      )}
+    </div>
   </main>
 </BaseLayout>
