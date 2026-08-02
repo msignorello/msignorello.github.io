@@ -1,0 +1,195 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const chapters = [
+  {
+    years: "2005 - 2011",
+    stage: "Builder",
+    company: "ISPBX, LLC",
+    role: "Co-Founder & Owner",
+    title: "My successful failure taught me the whole system.",
+    copy:
+      "I co-founded ISPBX with a school colleague and my father when VoIP was still new. Using open-source tools, we built VoIP hardware and a graphical interface, sold and supported the systems, and ran colocated infrastructure that provided calling services. It did not make us millions, but it survived, made some money, and taught me how an end-to-end technology business actually works. Borrowing from Apollo 13, I think of it as my successful failure.",
+    lesson:
+      "When you build, sell, host, and support the product, every decision eventually comes back to you.",
+    carries: ["Whole-product thinking", "Customer proximity", "Ownership"]
+  },
+  {
+    years: "2010 - 2013",
+    stage: "Customer translator",
+    company: "Matthijssen, Inc.",
+    role: "Business Development Representative",
+    title: "The hunt was another kind of building.",
+    copy:
+      "ISPBX taught me how much I loved the sale: finding an opportunity, understanding the problem, shaping the solution, writing the proposal, and pitching the idea. At Matthijssen, I applied what I had learned about sales, marketing, and practical solution design to a wider range of managed-services customers.",
+    lesson:
+      "A good sale begins with curiosity and ends with a solution people believe will work.",
+    carries: ["Solution selling", "Customer discovery", "Proposal building"]
+  },
+  {
+    years: "2013 - 2016",
+    stage: "Team builder",
+    company: "DataMotion, Inc.",
+    role: "Director of SaaS Implementation & Support",
+    title: "I was given the keys and expected to make things better.",
+    copy:
+      "DataMotion gave me my first real opportunity to build and lead a team. I scaled the function, mentored people, and worked directly with enterprise customers while remaining hands-on. We built out the data-center stack, implemented virtualization, handled late-night software upgrades, and owned the regulated SaaS implementation and support experience end to end. It was my first real taste of being trusted to create meaningful change, and the long nights were worth it when we delivered what our customers needed.",
+    lesson:
+      "Leadership started with ownership: give the team direction, stay close to the work, and do what it takes for the customer.",
+    carries: ["Team building", "Enterprise delivery", "Technical ownership"]
+  },
+  {
+    years: "2016 - 2024",
+    stage: "Product leader",
+    company: "Volvo Cars USA",
+    role: "Manager / Senior Manager, Connected Car",
+    title: "Everything I had learned was tested at a new scale.",
+    copy:
+      "I never expected to stay at Volvo as long as I did. After years in small businesses serving small-business customers, Volvo brought me into a methodical, technology-driven international company and a whole new world, literally and figuratively. It became the first real test of bringing everything together: thinking like an owner, selling ideas, rallying people, supporting operations, earning trust, and growing a team. The organization grew into double digits as I led remote developer teams, learned new skills, and shipped connected products including EV charging and customer self-service. It was one of the longest and most rewarding chapters of my career, and I left the team and systems better than I found them.",
+    lesson:
+      "Scale made me dangerous in the best sense: I learned what success looks like and how people, process, and tools work together to reach it.",
+    carries: ["Leadership at scale", "Global product delivery", "People, process, and tools"]
+  },
+  {
+    years: "2025 - Now",
+    stage: "Organization leader",
+    company: "Justin Alexander Group",
+    role: "Director, Digital Products & Engineering",
+    title: "Building the team became part of building the product.",
+    copy:
+      "Today I lead Product Owners, UX, engineering, partners, digital platforms, customer journeys, CRM and data integrations, analytics, and AI-assisted tools. The work is increasingly about creating the ownership, operating rhythms, information, and trust that let teams make better decisions without waiting for one person to solve everything.",
+    lesson:
+      "Good leaders do not collect every decision. They build teams capable of owning them.",
+    carries: ["Operating models", "Empowered teams", "Measured outcomes"]
+  }
+];
+---
+
+<BaseLayout
+  title="About Matt Signorello - Builder, Operator, and Product Organization Leader"
+  description="The professional evolution of Matt Signorello: entrepreneur, technical operator, connected-platform product leader, and builder of product organizations and delivery systems."
+  image="/images/profile/matt-signorello-headshot.jpg"
+  imageAlt="Matt Signorello"
+  schema={{
+    "@type": "ProfilePage",
+    "@id": "https://mattsignorello.com/about/#profilepage",
+    url: "https://mattsignorello.com/about/",
+    name: "About Matt Signorello",
+    description:
+      "Matt Signorello's path from hands-on technology entrepreneur to product organization and technology leader.",
+    mainEntity: { "@id": "https://mattsignorello.com/#person" },
+    isPartOf: { "@id": "https://mattsignorello.com/#website" }
+  }}
+>
+  <main class="about-page">
+    <header class="about-hero">
+      <div class="wrap about-hero-inner">
+        <p class="eyebrow">About Matt Signorello</p>
+        <h1>I started by building the whole thing.</h1>
+        <p>
+          The product. The infrastructure. The pitch. The support queue. The team
+          came later, and eventually became the work I cared most about building.
+        </p>
+      </div>
+    </header>
+
+    <section class="about-personal-intro" id="home-base">
+      <div class="wrap about-personal-intro-inner">
+        <div class="about-personal-intro-copy">
+          <p class="eyebrow">Home base</p>
+          <h2>Sparta, New Jersey.</h2>
+          <p class="about-personal-tagline">Husband, dad, and persistent tinkerer.</p>
+          <p>
+            I live in Sparta with my wife, daughter, and Lucy. Our basement is
+            part arcade, part workshop, and part technology lab, which probably
+            explains more about me than another list of professional credentials.
+          </p>
+          <p>
+            Outside work, I restore pinball machines, collect and repair retro
+            games, experiment with homelab and soldering projects, write, and run.
+            I enjoy understanding how systems fit together, fixing what does not,
+            and leaving things more useful than I found them.
+          </p>
+          <nav aria-label="Personal interests">
+            <a href="/features/arcade/">The arcade <span aria-hidden="true">&rarr;</span></a>
+            <a href="/features/lucy/">Meet Lucy <span aria-hidden="true">&rarr;</span></a>
+            <a href="/writing/">What I write <span aria-hidden="true">&rarr;</span></a>
+          </nav>
+        </div>
+        <figure class="about-location-map">
+          <img
+            src="/images/profile/sparta-new-jersey-map.svg"
+            alt="Map of New Jersey marking Sparta in the northwestern part of the state"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <section class="about-throughline">
+      <div class="wrap about-throughline-inner">
+        <p class="eyebrow">The throughline</p>
+        <h2>Each step taught me a different part of building something useful.</h2>
+        <p>
+          Building the whole solution introduced me to customers. Working with
+          customers pulled me toward sales and delivery. Supporting products showed
+          me how operational choices shape the user experience. Leading connected
+          products brought teams, technology, and business priorities together.
+          Each step made the next one feel less like a pivot and more like a natural
+          progression.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-timeline-section" aria-labelledby="about-timeline-title">
+      <div class="wrap">
+        <div class="about-section-heading">
+          <p class="eyebrow">Professional evolution</p>
+          <h2 id="about-timeline-title">Five chapters. One operating instinct.</h2>
+        </div>
+
+        <ol class="about-timeline">
+          {chapters.map((chapter, index) => (
+            <li class={`about-chapter about-chapter-${index + 1}`}>
+              <div class="about-chapter-marker" aria-hidden="true">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+              </div>
+              <div class="about-chapter-meta">
+                <span>{chapter.years}</span>
+                <strong>{chapter.stage}</strong>
+                <p>{chapter.company}<small>{chapter.role}</small></p>
+              </div>
+              <div class="about-chapter-copy">
+                <h3>{chapter.title}</h3>
+                <p>{chapter.copy}</p>
+                <blockquote>{chapter.lesson}</blockquote>
+                <ul aria-label="What carried forward">
+                  {chapter.carries.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="about-belief">
+      <div class="wrap about-belief-inner">
+        <p class="eyebrow">What stayed constant</p>
+        <p class="about-belief-statement">
+          Build for the customer. Understand the system. Give people ownership.
+          Expect accountability. Make room to learn when something fails.
+        </p>
+        <a href="/#notebook">Read my operator's notebook <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </section>
+
+    <nav class="wrap about-next" aria-label="Continue exploring">
+      <span>Continue exploring</span>
+      <a href="/resume/">Professional timeline <span aria-hidden="true">&rarr;</span></a>
+      <a href="/writing/">Articles and essays <span aria-hidden="true">&rarr;</span></a>
+      <a href="/contact/">Contact <span aria-hidden="true">&rarr;</span></a>
+    </nav>
+  </main>
+</BaseLayout>

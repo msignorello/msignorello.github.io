@@ -54,8 +54,8 @@ export const technicalLoopSteps = [
   {
     number: "01",
     label: "Diagnose",
-    title: "Find the root cause.",
-    text: "Trace the system, separate symptoms from causes, and break a complicated problem into parts the team can act on."
+    title: "Ask questions. Find the root cause.",
+    text: "Understand how we got here and why it matters. Trace the system, challenge assumptions, and separate symptoms from causes before deciding what to fix."
   },
   {
     number: "02",
@@ -107,10 +107,10 @@ export const selectedStories = [
   },
   {
     number: "04",
-    title: "Creating a product operating model from the ground up.",
+    title: "Building a product organization that delivers what it commits to.",
     summary:
-      "Introduced sprint-driven planning, clearer roadmaps, and hands-on team upskilling while delivering customer-facing B2B capabilities across Salesforce, HubSpot, and the web platform.",
-    metadata: ["Greenfield transformation", "Training & operating models", "Justin Alexander Group"],
+      "Stepped into a Director-level transformation mandate, reshaped product and engineering capacity, clarified roles and platform ownership, added UX, and formalized planning and execution to increase delivery velocity and predictability across Digital, IT, and Marketing.",
+    metadata: ["Product organization leadership", "Velocity & predictable delivery", "Justin Alexander Group"],
     href: "/resume/#justin-alexander",
     accent: "yellow"
   }

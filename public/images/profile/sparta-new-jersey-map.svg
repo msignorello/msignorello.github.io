@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+  <title id="title">Sparta, New Jersey locator map</title>
+  <desc id="desc">An outline of New Jersey with a star marking Sparta in the northwestern part of the state.</desc>
+  <defs>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#dfe2df" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="600" fill="#f7f7f4"/>
+  <rect width="900" height="600" fill="url(#grid)"/>
+  <path
+    d="M288.5 89.2 L343.6 119.9 L323.8 182.5 L296.7 196.7 L282.2 229.7 L327.4 246.2 L331.0 271.0 L311.1 386.7 L259.6 472.9 L226.2 497.7 L196.4 552.0 L181.1 516.6 L133.2 498.9 L74.5 451.7 L70.9 419.8 L70.0 415.1 L79.0 403.2 L94.4 377.3 L138.6 359.6 L141.3 343.0 L191.9 307.6 L200.0 288.7 L153.1 245.1 L151.3 217.9 L130.5 210.8 L128.7 186.0 L154.0 148.2 L140.4 125.8 L182.0 81.0 L191.0 57.3 L212.7 42.0 L288.5 89.2 Z"
+    fill="#e5e8e6"
+    stroke="#111210"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+  <path d="M222.3 112.4 H480" fill="none" stroke="#111210" stroke-width="2" stroke-dasharray="5 7"/>
+  <polygon
+    points="222.3,98.4 226.1,107.1 235.6,108.1 228.5,114.4 230.5,123.7 222.3,118.9 214.1,123.7 216.1,114.4 209.0,108.1 218.5,107.1"
+    fill="#f6c83f"
+    stroke="#111210"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+  <g transform="translate(500 88)">
+    <rect width="76" height="24" rx="4" fill="#ee4d3e"/>
+    <text x="38" y="16" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" text-anchor="middle">HOME BASE</text>
+    <text x="0" y="76" fill="#111210" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="800">SPARTA</text>
+    <text x="2" y="112" fill="#5e625f" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700">NEW JERSEY</text>
+    <line x1="0" y1="147" x2="280" y2="147" stroke="#111210" stroke-width="2"/>
+    <text x="0" y="187" fill="#5e625f" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">SUSSEX COUNTY</text>
+    <text x="0" y="218" fill="#5e625f" font-family="Arial, Helvetica, sans-serif" font-size="16">Northwestern New Jersey</text>
+    <text x="0" y="277" fill="#111210" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">The house. The arcade.</text>
+    <text x="0" y="306" fill="#111210" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">The workshop. The homelab.</text>
+  </g>
+  <g transform="translate(500 515)">
+    <circle cx="6" cy="6" r="6" fill="#0ca7a2"/>
+    <circle cx="30" cy="6" r="6" fill="#ee4d3e"/>
+    <circle cx="54" cy="6" r="6" fill="#f6c83f"/>
+    <text x="78" y="11" fill="#5e625f" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">41.03 N / 74.64 W</text>
+  </g>
+</svg>

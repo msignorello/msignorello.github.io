@@ -91,9 +91,9 @@ const featureUrl = `https://mattsignorello.com/features/${feature.slug}/`;
             <p class="eyebrow">Gallery</p>
             <h2>{feature.slug === "lucy" ? "A few years in the field." : "Inside the collection."}</h2>
           </div>
-          <div class="feature-gallery">
-            {feature.data.gallery.slice(0, 3).map((image, index) => (
-              <figure class={index === 0 ? "feature-main" : "feature-tile"}>
+          <div class={`feature-gallery feature-gallery-${feature.data.gallery.length}`}>
+            {feature.data.gallery.map((image, index) => (
+              <figure class={`feature-gallery-item feature-gallery-item-${index + 1}`}>
                 <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
                 {image.caption && <figcaption>{image.caption}</figcaption>}
               </figure>
