@@ -40,7 +40,7 @@ const formatArticleDate = (date: string) =>
 >
   <main>
     <div class="wrap">
-      <section class="hero-grid home-hero">
+      <section class="hero-grid home-hero" data-analytics-location="home_hero">
         <div class="hero">
           <p class="eyebrow">Product leadership / customer outcomes / technology operations</p>
           <h1>Making complex things <span>actually work.</span></h1>
@@ -85,15 +85,12 @@ const formatArticleDate = (date: string) =>
     <OperatorNotebook principles={principles} />
 
     <div class="wrap">
-      <WhatIBuild areas={buildAreas} />
-    </div>
-
-    <TechnicalOperator steps={technicalLoopSteps} />
-
-    <div class="wrap">
-      <SelectedStories stories={selectedStories} />
-
-      <section class="home-section thinking-section" id="thinking" aria-labelledby="thinking-title">
+      <section
+        class="home-section thinking-section"
+        id="thinking"
+        aria-labelledby="thinking-title"
+        data-analytics-location="home_writing"
+      >
         <div class="thinking-head">
           <div>
             <p class="eyebrow">Writing</p>
@@ -133,7 +130,22 @@ const formatArticleDate = (date: string) =>
       </section>
     </div>
 
-    <section class="beyond-band" id="beyond" aria-labelledby="beyond-title">
+    <div class="wrap">
+      <WhatIBuild areas={buildAreas} />
+    </div>
+
+    <TechnicalOperator steps={technicalLoopSteps} />
+
+    <div class="wrap">
+      <SelectedStories stories={selectedStories} />
+    </div>
+
+    <section
+      class="beyond-band"
+      id="beyond"
+      aria-labelledby="beyond-title"
+      data-analytics-location="home_personal"
+    >
       <div class="wrap beyond-inner">
         <div class="beyond-intro">
           <p class="eyebrow">Beyond the work</p>
@@ -166,7 +178,7 @@ const formatArticleDate = (date: string) =>
       </div>
     </section>
 
-    <section class="contact-close">
+    <section class="contact-close" data-analytics-location="home_contact">
       <div class="wrap contact-close-inner">
         <div>
           <p class="eyebrow">A difficult problem is a good place to start</p>

@@ -15,7 +15,7 @@ change can be reviewed in Git history.
 - Structured Markdown/MDX publishing
 - Responsive, accessible layouts without a client-side application framework
 - SEO metadata, structured data, RSS, sitemap, and legacy URL redirects
-- Privacy-aware GA4 analytics and outbound-link tracking
+- Privacy-aware GA4 analytics with focused content and lead-event tracking
 - Automated deployment through GitHub Actions and GitHub Pages
 
 ## Technology
@@ -58,6 +58,16 @@ static Astro site and publishes it through GitHub Pages.
 Google Analytics is optional. To enable it, add a GitHub Actions repository
 variable named `PUBLIC_GA_MEASUREMENT_ID` with the site's GA4 measurement ID.
 No passwords or private API credentials are required by the site.
+
+The site sends two intentional GA4 events in addition to Enhanced Measurement:
+
+- `select_content` when a visitor chooses an article, the writing archive, the
+  resume, the contact page, or the TechBoot consulting site
+- `generate_lead` when a visitor chooses email or LinkedIn from the contact page
+
+In GA4, enable Enhanced Measurement for page views, scrolls, file downloads, and
+generic outbound clicks. Mark `generate_lead` as a key event; `select_content`
+should remain an engagement event.
 
 The custom domain is declared in `public/CNAME`. DNS should only be moved to
 GitHub Pages after the deployed site has been reviewed.

@@ -138,7 +138,7 @@ const formatShortDate = (date: string) =>
           )}
         </figure>
       )}
-      <div class="content-body">
+      <div class="content-body" data-analytics-location="article_body">
         <Content />
         {article.data.cta && (
           <p class="article-cta">
@@ -148,7 +148,11 @@ const formatShortDate = (date: string) =>
       </div>
     </article>
 
-    <aside class="article-related" aria-labelledby="related-articles-title">
+    <aside
+      class="article-related"
+      aria-labelledby="related-articles-title"
+      data-analytics-location="related_articles"
+    >
       <div class="article-related-head">
         <p class="eyebrow">Keep reading</p>
         <h2 id="related-articles-title">Related ideas, different angle.</h2>

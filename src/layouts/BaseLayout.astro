@@ -121,13 +121,16 @@ const navGroups = [
           }
           window.gtag = gtag;
           gtag("js", new Date());
-          gtag("config", gaMeasurementId);
+          gtag("config", gaMeasurementId, {
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
+          });
         </script>
       </>
     )}
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header" data-analytics-location="site_header">
       <div class="wrap header-inner">
         <a class="brand" href="/" aria-label="Matt Signorello home">
           <span class="brand-mark">MS</span>
@@ -176,7 +179,7 @@ const navGroups = [
       </nav>
     </header>
     <slot />
-    <footer class="site-footer">
+    <footer class="site-footer" data-analytics-location="site_footer">
       <div class="wrap">
         <p>
           Matt Signorello. Product organizations, technology, and useful systems.
@@ -199,25 +202,9 @@ const navGroups = [
       });
     </script>
     <script>
-      document.addEventListener("click", (event) => {
-        const target = event.target instanceof Element ? event.target.closest("a[href]") : null;
-        if (!target || typeof window.gtag !== "function") return;
+      import { initAnalyticsTracking } from "../scripts/analytics";
 
-        const href = target.getAttribute("href");
-        if (!href) return;
-
-        const url = new URL(href, window.location.href);
-        const isEmail = href.startsWith("mailto:");
-        const isOutbound = url.hostname !== window.location.hostname;
-
-        if (isEmail || isOutbound) {
-          window.gtag("event", "outbound_click", {
-            link_url: target.href,
-            link_text: target.textContent?.trim() ?? "",
-            transport_type: "beacon"
-          });
-        }
-      });
+      initAnalyticsTracking();
     </script>
   </body>
 </html>
