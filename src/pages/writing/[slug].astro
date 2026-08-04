@@ -43,7 +43,7 @@ const formatShortDate = (date: string) =>
 ---
 
 <BaseLayout
-  title={`${article.data.title} - Matt Signorello`}
+  title={`${article.data.seoTitle ?? article.data.title} | Matt Signorello`}
   description={article.data.description}
   image={articleImage}
   imageAlt={article.data.coverImage?.alt ?? article.data.title}

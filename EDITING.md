@@ -17,6 +17,7 @@ Each article is an `.mdx` file with frontmatter:
 ```yaml
 ---
 title: "Article title"
+seoTitle: "Keyword-focused search title"
 description: "Short SEO description."
 date: "2026-07-08"
 tags: ["Leadership", "Systems"]
@@ -28,6 +29,10 @@ featured: false
 ```
 
 Edit the body below the frontmatter like normal Markdown.
+
+Use `title` for the human, editorial headline shown on the site. Use `seoTitle`
+for the concise, keyword-focused title shown in browser tabs and search results.
+Do not add "Matt Signorello" to `seoTitle`; the site adds the name automatically.
 
 Use a lowercase, hyphenated filename that matches the final URL. For example:
 
