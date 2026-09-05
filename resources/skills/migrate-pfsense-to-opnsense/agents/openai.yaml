@@ -1,0 +1,4 @@
+interface:
+  display_name: "pfSense to OPNsense Migration"
+  short_description: "Safely plan and validate firewall migrations"
+  default_prompt: "Use $migrate-pfsense-to-opnsense to audit a pfSense backup and prepare a safe, reversible OPNsense migration plan."

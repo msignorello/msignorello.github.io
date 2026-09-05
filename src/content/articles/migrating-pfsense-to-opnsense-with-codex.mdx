@@ -3,7 +3,7 @@ title: "How We Migrated from pfSense to OPNsense with Codex"
 seoTitle: "pfSense to OPNsense Migration with Codex"
 description: "A practical case study in using Codex, the OPNsense API, SSH, backups, and packet captures to migrate a production firewall from pfSense safely."
 date: "2026-07-18"
-updated: "2026-07-18"
+updated: "2026-09-04"
 tags: ["Technology", "AI", "Operations"]
 featured: false
 coverImage:
@@ -14,6 +14,8 @@ cta:
   label: "Start a conversation"
   href: "/contact/"
 ---
+
+import SkillResourceCallout from "../../components/articles/SkillResourceCallout.astro";
 
 Moving from pfSense to OPNsense sounds straightforward until the old firewall has years of accumulated responsibility.
 
@@ -28,6 +30,14 @@ Codex read the pfSense XML, helped turn the old configuration into a migration i
 That division of labor was the key. Codex could work quickly across a large configuration, but the migration remained a collaborative network-engineering exercise rather than an unsupervised automation run.
 
 > Codex made the migration practical because API access turned the router into an inspectable and reversible system, not because AI made routing problems disappear.
+
+<SkillResourceCallout
+  title="Migrate pfSense to OPNsense with Codex"
+  description="Download the reusable, audit-first skill built from this migration. It inventories a pfSense backup, maps dependencies, chooses the safest OPNsense control plane, and validates each packet path without treating the backup as a blind import."
+  downloadHref="/downloads/migrate-pfsense-to-opnsense.zip"
+  sourceHref="https://github.com/msignorello/msignorello.github.io/tree/main/resources/skills/migrate-pfsense-to-opnsense"
+  metadata="API-first · MCP-compatible · SSH-verified · Secrets redacted"
+/>
 
 ## What Codex brought to the migration
 
