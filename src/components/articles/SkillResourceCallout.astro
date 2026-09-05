@@ -1,0 +1,94 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description: string;
+  downloadHref: string;
+  sourceHref: string;
+  metadata?: string;
+}
+
+const {
+  eyebrow = "Codex skill / Free resource",
+  title,
+  description,
+  downloadHref,
+  sourceHref,
+  metadata,
+} = Astro.props;
+---
+
+<aside class="skill-resource" aria-labelledby="skill-resource-title">
+  <div class="skill-resource-copy">
+    <p class="skill-resource-eyebrow">{eyebrow}</p>
+    <h2 id="skill-resource-title">{title}</h2>
+    <p>{description}</p>
+    {metadata && <p class="skill-resource-meta">{metadata}</p>}
+  </div>
+  <div class="skill-resource-actions">
+    <a class="button primary" href={downloadHref} download>Download the skill</a>
+    <a class="button" href={sourceHref}>View source</a>
+  </div>
+</aside>
+
+<style>
+  .skill-resource {
+    display: grid;
+    gap: 18px;
+    margin: 30px 0 40px;
+    padding: 20px;
+    border: 1px solid var(--ink);
+    border-top: 6px solid var(--accent);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 16px 42px rgba(20, 21, 20, 0.08);
+  }
+
+  .skill-resource h2 {
+    margin: 0 0 8px;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    line-height: 1.15;
+  }
+
+  .skill-resource p {
+    margin: 0;
+  }
+
+  .skill-resource-eyebrow,
+  .skill-resource-meta {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .skill-resource-eyebrow {
+    margin-bottom: 8px !important;
+    color: var(--accent);
+  }
+
+  .skill-resource-meta {
+    margin-top: 14px !important;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .skill-resource-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  @media (min-width: 760px) {
+    .skill-resource {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .skill-resource-actions {
+      justify-content: flex-end;
+    }
+  }
+</style>
