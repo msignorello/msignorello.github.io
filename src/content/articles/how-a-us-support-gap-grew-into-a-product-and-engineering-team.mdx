@@ -1,0 +1,114 @@
+---
+title: "How a US Support Gap Grew Into a Product and Engineering Team"
+seoTitle: "How Support Built a Product and Engineering Team"
+description: "How a one-person US support function at Volvo Cars grew into a multidisciplinary product, engineering, operations, quality, and technical support team."
+date: "2026-09-10"
+updated: "2026-09-10"
+tags: ["Leadership", "Product", "Operations"]
+featured: true
+coverImage:
+  src: "/images/articles/support-product-engineering-team.webp"
+  alt: "Illustrated journey from connected-car support and diagnostics to product engineering and a global team"
+  caption: "Support signals / technical credibility / team growth"
+linkedinUrl: "https://www.linkedin.com/pulse/how-us-support-gap-grew-product-engineering-team-matt-signorello-le3dc/"
+cta:
+  label: "Start a conversation"
+  href: "/contact/"
+---
+
+Whenever I meet someone new, the conversation eventually gets to "What do you do?"
+
+If we find some common ground, the conversation usually goes beyond job titles. I often end up talking about leadership qualities or how teams grow, evolve, and take on more responsibility.
+
+One story that tends to come up is how the US-based Connected Car team at Volvo Cars came to be. It eventually covered product, engineering, technical support, operations, and quality, but it did not start with a large organizational design or a request to build a multidisciplinary team.
+
+It started with one person in the US and a basic problem: when something went wrong with the mobile app or a connected service, we often could not determine what was actually happening from here.
+
+A customer might bring a perfectly functional vehicle into a workshop because something did not look right in the app. Sometimes there was a real defect. Sometimes the app and vehicle were working as designed, but not the way the customer expected. Either way, the workshop could spend hours searching for a problem in the car when the real issue involved the app, a connected service, or how the experience had been explained.
+
+Nobody won. The customer lost time. The workshop used capacity it could have spent on a vehicle that needed repair. Volvo paid for diagnostic work that did not resolve the actual problem.
+
+On paper, these were support tickets. In practice, they exposed a much larger gap.
+
+The people with the deepest access to the mobile and connectivity systems were primarily based in Europe. Their support capacity was too small for the volume and needs of the US market. We also lacked local tools, context, and vehicles to independently validate what customers were experiencing.
+
+> The team grew because each problem we learned to solve exposed the next capability we needed.
+
+## Solving the next problem
+
+Our first step was not glamorous. We gained access to the same diagnostic tools used by our European colleagues and learned how to triage issues ourselves.
+
+That meant looking beyond the wording of a ticket. Was the app sending the request? Did the backend receive it? Did the vehicle respond? Was the customer seeing an app problem, a vehicle-software problem, an account problem, or simply a difference between how the feature worked and how someone expected it to work?
+
+Once we could answer some of those questions, the next gap became clear. We needed deeper technical knowledge and better coverage during US support hours. As that knowledge grew, we needed physical vehicles so we could reproduce reported behavior instead of reasoning about it from a case description.
+
+We built a test fleet and began validating app behavior against actual vehicles. That eventually brought us into the work before releases reached customers.
+
+The US team started testing upcoming app versions and features in our market. Sometimes we caught straightforward issues, such as metric units appearing where US customers expected imperial measurements. Other findings involved differences in vehicle deliveries, customer-service processes, or how people in the market actually used the product.
+
+We also began publishing internal release notes, which had not been consistently available before. Support teams could see what changed, why it changed, and which issues were already known. Even when a release was not perfect, the people helping customers no longer had to discover every change through incoming calls.
+
+Over time, daily mobile and connectivity cases dropped from roughly 20 to 25 per day to one or two. Some days there were none. App defects still happened, but stronger validation, clearer communication, and better support readiness changed how often customers encountered them and how quickly we could respond.
+
+The work was becoming more than support. It was turning into a US technical-operations function spanning triage, testing, validation, release readiness, training, and communication.
+
+## Earning trust inside a global organization
+
+Growing a team inside a global company is not only about proving that more work exists. You need to show that the local organization can take on greater responsibility without creating unnecessary risk or working against global priorities.
+
+We joined the global release-readiness process and brought our US findings into release meetings. We did not operate the global release train or make unilateral decisions. We earned a voice by showing what we tested, what failed, how often it failed, and what the likely market impact would be.
+
+One release made that responsibility especially clear.
+
+We were seeing reliability problems with certain app functions. Requests were flaky and often required several retries. Initial appearances pointed toward the app, but our testing connected the behavior to a new software release for a vehicle ECU.
+
+The global teams had legitimate reasons to remain on schedule. The release contained features for other markets, and holding it was not a small request. If the US team was going to recommend stopping a public release, we needed more than a bad feeling.
+
+We brought repeatable test results, vehicle and application logs, videos, support history, and clear reproduction steps. Our recommendation was to keep that version internal and wait for a more stable combination of app and vehicle software before putting it in customers' hands.
+
+Calls like that were not taken lightly. We had to earn the trust of colleagues carrying their own commitments and pressures. Our credibility depended on understanding the system, respecting the wider context, and supporting our position with evidence.
+
+The outcome was not necessarily a faster release. It was a better-quality release and a US support organization that knew what was coming.
+
+Trust accumulated. Consistent triage led to deeper access. Reliable testing earned us a place in release decisions. That track record eventually gave the US team an opportunity to develop features inside the globally developed app.
+
+## From supporting the app to building it
+
+Our first US-developed feature was real-time customer-service chat.
+
+It did not have the attention-grabbing appeal of a major vehicle feature. That made it a reasonable place to start. It was useful, relatively low risk, and based on a customer problem we understood firsthand.
+
+It was not technically trivial. The feature required frontend and backend development, API integrations, authentication, screenshot sharing, and a connection to the separate customer-service platform used in the US.
+
+Customers could chat with a person and share visual context without making a phone call. Service representatives received better information for diagnosing issues, and customers gained another way to get help without tying up the same capacity as a traditional call.
+
+Combined with other self-service improvements and better product quality, that work contributed to an approximately 15% reduction in customer call volume.
+
+The feature also proved something larger. A team that began by answering tickets had developed enough product knowledge, technical credibility, and global trust to build safely within a shared application.
+
+What started with one US employee eventually grew into a team of more than ten across product, engineering, technical support, operations, and quality. The growth was not random, but it was organic. We did not add functions simply because they looked good on an organization chart. Each capability addressed a problem we could demonstrate, and each success earned the right to take on more.
+
+<aside class="article-takeaways">
+  <strong>What changed</strong>
+  <ul>
+    <li>Daily mobile and connectivity cases fell from roughly 20-25 to one or two.</li>
+    <li>Customer-service chat and other improvements contributed to an approximately 15% reduction in call volume.</li>
+    <li>One US role grew into a multidisciplinary team of more than ten.</li>
+  </ul>
+</aside>
+
+## Support is a signal, not a roadmap
+
+There is an important limit to this story. Bringing Support closer to Product does not mean treating every customer report as a showstopper or immediately creating a feature request.
+
+Experience matters. If five people take the time to call about a problem, I assume there may be many more experiencing it silently. That is a reason to investigate, not proof by itself.
+
+We looked for supporting signals in usage data, repeated cases, social media, owner forums, application behavior, and technical logs. We tried to understand why something was happening before deciding what it meant. Sometimes the answer was a defect. Sometimes it was confusing design, missing training, a known limitation, or a reasonable customer expectation that the product did not yet meet.
+
+Leaders also need to trust the people doing the triage. If someone close to the cases raises a concern, listen. They may not have enough evidence yet to define the fix, but they are often seeing a pattern before it becomes obvious in a dashboard.
+
+Not every issue should stop a release, and not every repeated complaint belongs on the roadmap. Building a case can take time. The leadership judgment is knowing when there is enough evidence to act, what kind of response is appropriate, and who needs to be involved.
+
+Support became part of our product lifecycle because the team did more than answer tickets. It helped validate releases, explain known issues, train other teams, identify patterns, and eventually build product capabilities based on problems it understood firsthand.
+
+That experience still shapes how I think about building teams today. The team grew by solving the next real problem and earning trust along the way. That is harder to capture in an organization chart, but it is how a small local presence became a meaningful product and engineering organization inside a complex global company.

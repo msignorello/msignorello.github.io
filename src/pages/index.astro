@@ -93,19 +93,26 @@ const formatArticleDate = (date: string) =>
       >
         <div class="thinking-head">
           <div>
-            <p class="eyebrow">Writing</p>
-            <h2 id="thinking-title">What I've learned. What I'm still figuring out.</h2>
+            <p class="eyebrow">Articles & essays</p>
+            <h2 id="thinking-title">Latest writing.</h2>
             <p class="thinking-intro">
-              Articles about product leadership, technology, teams, careers, and the practical
-              realities of getting good work delivered.
+              Practical stories about product leadership, technology, teams, careers, and what it
+              really takes to deliver and support useful work.
             </p>
           </div>
+          <a class="archive-link thinking-head-link" href="/writing/">Browse all articles <span aria-hidden="true">→</span></a>
         </div>
 
         <div class="thinking-layout">
           {curatedArticles.map((article, index) => (
             <article class={`thinking-story ${index === 0 ? "thinking-feature" : ""}`}>
-              {article.data.coverImage && (
+              <div class="thinking-copy">
+                <p>{article.data.tags[0] ?? "Essay"} / {formatArticleDate(article.data.date)}</p>
+                <h3><a href={`/writing/${article.slug}/`}>{article.data.title}</a></h3>
+                <p>{article.data.description}</p>
+                <a class="thinking-link" href={`/writing/${article.slug}/`}>Read article <span aria-hidden="true">→</span></a>
+              </div>
+              {index === 0 && article.data.coverImage && (
                 <a class="thinking-image" href={`/writing/${article.slug}/`} aria-label={`Read ${article.data.title}`}>
                   <img
                     src={article.data.coverImage.src}
@@ -117,16 +124,10 @@ const formatArticleDate = (date: string) =>
                   />
                 </a>
               )}
-              <div class="thinking-copy">
-                <p>{article.data.tags[0] ?? "Essay"} / {formatArticleDate(article.data.date)}</p>
-                <h3><a href={`/writing/${article.slug}/`}>{article.data.title}</a></h3>
-                <p>{article.data.description}</p>
-                <a class="thinking-link" href={`/writing/${article.slug}/`}>Read the piece <span aria-hidden="true">→</span></a>
-              </div>
             </article>
           ))}
         </div>
-        <a class="archive-link" href="/writing/">View all writing <span aria-hidden="true">→</span></a>
+        <a class="archive-link thinking-foot-link" href="/writing/">Browse all articles <span aria-hidden="true">→</span></a>
       </section>
     </div>
 

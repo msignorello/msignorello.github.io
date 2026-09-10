@@ -2800,8 +2800,16 @@ textarea {
 }
 
 .thinking-head {
-  max-width: 940px;
+  display: flex;
+  max-width: none;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
   margin-bottom: 28px;
+}
+
+.thinking-head > div {
+  max-width: 940px;
 }
 
 .thinking-intro {
@@ -2848,7 +2856,7 @@ textarea {
   display: grid;
   gap: 10px;
   align-content: start;
-  padding: 20px;
+  padding: 24px;
 }
 
 .thinking-copy > p:first-child {
@@ -2862,7 +2870,7 @@ textarea {
 
 .thinking-copy h3 {
   margin: 0;
-  font-size: 1.42rem;
+  font-size: 1.55rem;
   line-height: 1.08;
 }
 
@@ -2898,9 +2906,34 @@ textarea {
 .archive-link {
   display: inline-flex;
   gap: 8px;
-  margin-top: 28px;
   padding-bottom: 4px;
   border-bottom: 2px solid var(--ink);
+}
+
+.thinking-head-link {
+  flex: 0 0 auto;
+  margin-bottom: 5px;
+}
+
+.thinking-foot-link {
+  margin-top: 28px;
+}
+
+@media (max-width: 779px) {
+  .thinking-head {
+    display: grid;
+    align-items: start;
+  }
+
+  .thinking-head-link {
+    display: none;
+  }
+}
+
+@media (min-width: 780px) {
+  .thinking-foot-link {
+    display: none;
+  }
 }
 
 .beyond-band {
@@ -3197,71 +3230,54 @@ textarea {
   }
 
   .thinking-feature {
-    position: relative;
-    display: block;
-    min-height: 440px;
+    display: grid;
+    min-height: 340px;
     grid-column: 1 / -1;
-    isolation: isolate;
-    border: 0;
-    background: var(--ink);
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    background: rgba(255, 255, 255, 0.92);
   }
 
   .thinking-feature .thinking-image {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
     aspect-ratio: auto;
     border: 0;
-  }
-
-  .thinking-feature .thinking-image::after {
-    position: absolute;
-    content: "";
-    inset: 0;
-    background:
-      linear-gradient(90deg, rgba(17, 19, 18, 0.94) 0%, rgba(17, 19, 18, 0.76) 48%, rgba(17, 19, 18, 0.25) 100%),
-      linear-gradient(0deg, rgba(17, 19, 18, 0.7) 0%, transparent 55%);
+    border-left: 1px solid var(--line);
   }
 
   .thinking-feature .thinking-copy {
-    min-height: 440px;
-    align-content: end;
-    padding: 42px;
-    color: white;
+    min-height: 340px;
+    align-content: center;
+    padding: 38px 42px;
   }
 
   .thinking-feature .thinking-copy > p:first-child {
-    color: var(--accent-3);
+    color: var(--accent);
   }
 
   .thinking-feature .thinking-copy h3 {
-    max-width: 780px;
-    font-size: 2.45rem;
+    max-width: 680px;
+    font-size: 2.35rem;
   }
 
   .thinking-feature .thinking-copy h3 a,
   .thinking-feature .thinking-link {
-    color: white;
+    color: var(--ink);
   }
 
   .thinking-feature .thinking-copy > p:not(:first-child) {
-    max-width: 680px;
-    color: rgba(255, 255, 255, 0.8);
+    max-width: 620px;
+    color: var(--muted);
     font-size: 1rem;
     -webkit-line-clamp: 3;
   }
 
   .thinking-story:not(.thinking-feature) {
     align-content: start;
-  }
-
-  .thinking-story:not(.thinking-feature) .thinking-image {
-    aspect-ratio: 16 / 7.25;
+    min-height: 250px;
   }
 
   .thinking-story:not(.thinking-feature) .thinking-copy {
-    min-height: 230px;
-    padding: 22px;
+    min-height: 250px;
+    padding: 28px;
   }
 
   .thinking-story:not(.thinking-feature) .thinking-copy > p:not(:first-child) {

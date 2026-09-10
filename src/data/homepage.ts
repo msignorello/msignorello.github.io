@@ -117,7 +117,7 @@ export const selectedStories = [
 ];
 
 export const curatedArticleSlugs = [
+  "how-a-us-support-gap-grew-into-a-product-and-engineering-team",
   "migrating-pfsense-to-opnsense-with-codex",
-  "starting-over-as-a-consultant",
   "can-you-hear-me-now-the-problem-with-leadership-dead-zones"
 ];
