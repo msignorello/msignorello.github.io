@@ -1,0 +1,145 @@
+---
+title: "I spent $42 on an AI QA review. It didn't find much."
+seoTitle: "AI Coding Agent Costs: QA Reviews and Trust"
+description: "A $42 AI QA review of a BigQuery report raises questions about AI coding agent costs, SQL validation, human oversight, and trusting AI-generated work."
+date: "2026-09-30"
+tags: ["AI", "Technology", "Product"]
+featured: false
+cta:
+  label: "Compare notes"
+  href: "/contact/"
+---
+
+I spent $42 in AI tokens on a quality assurance (QA) review of a report built from BigQuery data and SQL queries. I wanted a second check: were the calculations right, did the implementation follow the intended business logic, and were the conclusions supported?
+
+If I remember correctly, the reviewer was Claude Sonnet 4.5. The point was to check the report's accuracy, not just whether the code ran.
+
+My first reaction was that it felt expensive. Not because $42 is an outrageous amount of money, but because I had already spent a lot of time watching the work, questioning the output, and making corrections along the way.
+
+Now I was paying for another check.
+
+I sat down to write about that experience and ended up in a much longer conversation with ChatGPT. What started as "could this cost more than having a person do it?" turned into questions about trust, software quality, and how much work I could realistically hand over to AI coding agents.
+
+There was also a fairly significant problem with my original argument.
+
+## The alternative might have been not building it
+
+I wouldn't have been able to build this on my own.
+
+I'm technical, but I'm not a software developer by trade. My background includes leading product and technology teams, working directly with customers, and supporting what we put into the world.
+
+I'm comfortable figuring out what we need to accomplish, asking questions, and working through tradeoffs. I'm also open to how we get there. I don't need my first idea to be the final approach.
+
+AI has let me get much more hands-on with the building itself. Things that previously would have required development help are now ideas I can explore directly.
+
+That's a big deal to me.
+
+So comparing $42 with the time it would take me to code something wasn't particularly useful. The alternative might have been hiring someone, waiting for development resources, or not building it at all.
+
+Still, gaining the ability to build something and being able to trust the result are different things. I learned that fairly early.
+
+## When an AI agent says it is done
+
+My first real experience with autonomous AI coding was [through OpenClaw](/writing/vibe-coding-with-openclaw-i-thought-i-was-the-exception/). Honestly, it was way ahead of what I expected. It could access the filesystem, use tools, and work through tasks with agents.
+
+I would discuss an idea, it would suggest an approach, and I'd say, "Okay, go."
+
+Sometimes it worked well. Other times, it would report that something was done when it hadn't actually happened.
+
+One example was especially simple. I asked it to display the contents of a directory.
+
+It gave me a listing. It hadn't inspected the directory.
+
+It had made up what it expected to find.
+
+Then came the corrections and apologies as we worked back to what had actually happened. A failed command would have been manageable. Having to establish whether the command ran at all was more concerning.
+
+After that, I started checking the ordinary things too.
+
+I eventually moved toward direct interaction with Codex. Part of my thinking was that a tool directly from OpenAI should work better. That was an expectation on my part. What actually helped was being able to see the work and inspect the result.
+
+As the tooling improved, my workflow improved with it. I could interact more directly with my remote development environment, spend less time copying information between systems, and have more work happen in parallel.
+
+Those were meaningful improvements. But I was still getting pulled back into the process.
+
+## Human oversight has a cost too
+
+I enjoy being involved in product development. I like discussing an idea, challenging an approach, and seeing how people respond to what we build. I'm not trying to remove myself from those decisions.
+
+What gets frustrating is spending time documenting a requirement, then discovering that the implementation quietly took a different direction.
+
+I've encountered hard-coded values, assumptions that should have been questions, and interfaces that didn't follow the agreed design guidelines. Sometimes a feature looks convincing until you actually use it.
+
+If you didn't know what to look for, you could reasonably think it was finished.
+
+Having led both development and support teams, I've seen how something that looks complete can still leave customers struggling. That's why I want a dedicated UX pass. It's why I want an engineering review to question unnecessary complexity.
+
+Those reviews are part of building something useful. But if I'm personally initiating each review, checking its quality, and carrying the findings back into development, how much coordination have I really delegated?
+
+I assumed the effort I put into documentation would reduce that involvement. The research made me less confident that the relationship is so straightforward.
+
+One study of repository instruction files found [no general improvement in task success alongside higher inference costs](https://arxiv.org/abs/2602.11988). Another reported [lower median runtime and reduced output token usage with comparable task completion behavior](https://arxiv.org/abs/2601.20404).
+
+These studies used different tasks and evaluation setups. Neither directly tests my product requirements or design guidelines, and lower output token usage isn't the same as a lower total bill. They don't tell me to stop documenting. They do challenge the idea that supplying more context automatically means less supervision.
+
+## What the AI QA review actually checked
+
+We had worked through the report's data, queries, and business logic in one conversation. The agreed approach then needed to become tasks, and those tasks were implemented in separate chat contexts.
+
+There were several opportunities for something to get lost or interpreted differently.
+
+The validation was checking that what we had worked out at the beginning was still what we had at the end. This was broader than an AI code review: a query could run successfully and still produce a report that answered the wrong business question.
+
+It didn't uncover much. I suspect my involvement along the way contributed to that, although I can't know what would have happened without it.
+
+That left me wondering whether I had paid for useful reassurance or duplicated a lot of my own effort.
+
+It also made me think about what happens when I'm not watching so closely.
+
+## Why multi-agent demos are hard to compare with real work
+
+I kept seeing examples of AI teams with a developer, a designer, a product owner, and a QA agent. An idea goes in, the agents collaborate, and an impressive application comes out.
+
+Meanwhile, I'm asking why a requirement we agreed on yesterday has disappeared.
+
+What was I missing?
+
+A demo doesn't tell me how much preparation went into the environment, how often someone intervened, or what happened when they tested beyond the intended path. That doesn't make the result fake. It does make it difficult to compare with my own experience.
+
+Reading [Anthropic's experiments with long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps) helped. Their agents sometimes evaluated their own work too generously. Evaluators noticed legitimate issues, then approved the work anyway. Applications could look impressive while missing core functionality.
+
+That sounded familiar.
+
+Separate evaluation improved results, but getting the evaluator to perform useful reviews required tuning. Their research on [how people supervise agents](https://www.anthropic.com/research/measuring-agent-autonomy) also found that experienced Claude Code users auto-approved more actions while interrupting more frequently. That is an observed usage pattern, not proof that more interruptions produce better work.
+
+Neither is a universal verdict on AI development. But it reassured me that meaningful involvement wasn't necessarily a sign I was doing everything wrong.
+
+## The workflow has to change as the models improve
+
+Then the research challenged me in the other direction.
+
+As models improved, some supporting steps became unnecessary. In the [same application-development experiments](https://www.anthropic.com/engineering/harness-design-long-running-apps), Anthropic describes removing context resets and later simplifying the sprint structure as newer models became more capable. For some tasks, a separate evaluator became unnecessary overhead; for others, it still added value.
+
+So I could also be spending time maintaining a process around a problem the tooling had already reduced.
+
+That's an important part of this journey. I'm learning how to work with these systems while the systems themselves keep changing. A separate reviewer might be valuable for one task and unnecessary overhead for another. Adding more agents isn't automatically progress, but neither is insisting that one agent should handle everything.
+
+## What would make the review worth paying for?
+
+I started this thinking $42 was expensive for a check that didn't find much. I'm less sure that was the right way to judge it.
+
+A review doesn't have to discover a serious problem to be useful. But I had already spent considerable time supervising this work. I couldn't tell how much additional confidence I was buying, or whether I could have stepped back sooner and let the validation do more of the checking.
+
+That's the opportunity I'm interested in.
+
+If an automated workflow can carry requirements through development, challenge the implementation, test it properly, and bring me the decisions that need my attention, I'm willing to pay for that. Potentially quite a bit more than $42.
+
+I just want evidence that those responsibilities are being handled. Having several agents involved doesn't establish that on its own.
+
+My goal isn't to type a vague idea and wake up to an enterprise-ready product. I want to agree on a meaningful feature and come back to a development build that's ready for serious QA. I expect questions, tradeoffs, and defects. I'd like less of my involvement to be spent repeating settled instructions.
+
+For this particular run, I can't honestly claim the $42 saved me time. It did make me think harder about where automated development could help.
+
+AI has already expanded what I'm able to build. If these workflows can also give me a dependable way to step back, I can spend more time shaping the product, talking to the people using it, and deciding what to try next.
+
+That's something I'd be happy to invest in.
